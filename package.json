@@ -1,0 +1,11 @@
+{
+  "name": "iprofilsync",
+  "version": "1.0.0",
+  "description": "profiles synchronisation tools",
+  "dependencies": {  },
+  "devDependencies": {  },
+  "scripts": { "test": "node_modules/mocha/bin/mocha" },
+  "main": "iprofilsync",
+  "author": "Jeremy Denoun",
+  "license": "MIT"
+}

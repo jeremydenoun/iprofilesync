@@ -1,0 +1,197 @@
+{
+  "Working Directory" : "\/Users\/...",
+  "Ansi 12 Color" : {
+    "Green Component" : 0.3333333,
+    "Red Component" : 0.3333333,
+    "Blue Component" : 1
+  },
+  "Normal Font" : "Monaco 12",
+  "Ansi 2 Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0,
+    "Blue Component" : 0
+  },
+  "Bold Color" : {
+    "Green Component" : 0.4901961,
+    "Red Component" : 1,
+    "Blue Component" : 0.4901961
+  },
+  "Custom Directory" : "Yes",
+  "Ansi 4 Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0,
+    "Blue Component" : 0.7333333
+  },
+  "Rows" : 24,
+  "Default Bookmark" : "No",
+  "Non-ASCII Anti Aliased" : true,
+  "Use Bright Bold" : true,
+  "Ansi 10 Color" : {
+    "Green Component" : 1,
+    "Red Component" : 0.3333333,
+    "Blue Component" : 0.3333333
+  },
+  "Ambiguous Double Width" : false,
+  "Jobs to Ignore" : [
+    "rlogin",
+    "ssh",
+    "slogin",
+    "telnet"
+  ],
+  "Ansi 15 Color" : {
+    "Green Component" : 1,
+    "Red Component" : 1,
+    "Blue Component" : 1
+  },
+  "Foreground Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0.7333333
+  },
+  "Bound Hosts" : [
+
+  ],
+  "Blinking Cursor" : false,
+  "Disable Window Resizing" : false,
+  "Sync Title" : false,
+  "Prompt Before Closing 2" : false,
+  "BM Growl" : true,
+  "Smart Cursor Color" : true,
+  "Mouse Reporting" : true,
+  "Screen" : -1,
+  "Selection Color" : {
+    "Green Component" : 0.8353,
+    "Red Component" : 0.7098,
+    "Blue Component" : 1
+  },
+  "Columns" : 80,
+  "Idle Code" : 0,
+  "Disable Smcup Rmcup" : false,
+  "Ansi 13 Color" : {
+    "Green Component" : 0.3333333,
+    "Red Component" : 1,
+    "Blue Component" : 1
+  },
+  "Custom Command" : "Yes",
+  "ASCII Anti Aliased" : true,
+  "Non Ascii Font" : "Monaco 12",
+  "Vertical Spacing" : 1,
+  "Use Bold Font" : false,
+  "Option Key Sends" : 0,
+  "Selected Text Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0,
+    "Blue Component" : 0
+  },
+  "Background Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0,
+    "Blue Component" : 0
+  },
+  "Character Encoding" : 4,
+  "Ansi 11 Color" : {
+    "Green Component" : 1,
+    "Red Component" : 1,
+    "Blue Component" : 0.3333333
+  },
+  "Unlimited Scrollback" : false,
+  "Keyboard Map" : {
+    "0xf703-0x220000" : {
+      "Action" : 0
+    },
+    "0xf72d-0x20000" : {
+      "Action" : 8
+    },
+    "0xf701-0x220000" : {
+      "Action" : 6
+    },
+    "0xf729-0x20000" : {
+      "Action" : 5
+    },
+    "0xf72c-0x20000" : {
+      "Action" : 9
+    },
+    "0xf72b-0x20000" : {
+      "Action" : 4
+    },
+    "0xf700-0x220000" : {
+      "Action" : 7
+    },
+    "0xf702-0x220000" : {
+      "Action" : 2
+    }
+  },
+  "Window Type" : 0,
+  "Blink Allowed" : false,
+  "Cursor Type" : 2,
+  "Background Image Location" : "",
+  "Blur" : false,
+  "Scrollback Lines" : 5000,
+  "Send Code When Idle" : false,
+  "Close Sessions On End" : true,
+  "Visual Bell" : true,
+  "Terminal Type" : "xterm",
+  "Flashing Bell" : false,
+  "Silence Bell" : false,
+  "Ansi 14 Color" : {
+    "Green Component" : 1,
+    "Red Component" : 0.3333333,
+    "Blue Component" : 1
+  },
+  "Cursor Text Color" : {
+    "Green Component" : 1,
+    "Red Component" : 1,
+    "Blue Component" : 1
+  },
+  "Minimum Contrast" : 0,
+  "Shortcut" : "",
+  "Cursor Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0.7333333
+  },
+  "Transparency" : 0.05,
+  "Ansi 0 Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0,
+    "Blue Component" : 0
+  },
+  "Ansi 1 Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0
+  },
+  "Ansi 3 Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0
+  },
+  "Horizontal Spacing" : 1,
+  "Scrollback With Status Bar" : false,
+  "Ansi 6 Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0,
+    "Blue Component" : 0.7333333
+  },
+  "Ansi 7 Color" : {
+    "Green Component" : 0.7333333,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0.7333333
+  },
+  "Ansi 8 Color" : {
+    "Green Component" : 0.3333333,
+    "Red Component" : 0.3333333,
+    "Blue Component" : 0.3333333
+  },
+  "Ansi 9 Color" : {
+    "Green Component" : 0.3333333,
+    "Red Component" : 1,
+    "Blue Component" : 0.3333333
+  },
+  "Right Option Key Sends" : 0,
+  "Ansi 5 Color" : {
+    "Green Component" : 0,
+    "Red Component" : 0.7333333,
+    "Blue Component" : 0.7333333
+  }
+}
