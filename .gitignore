@@ -1,3 +1,5 @@
+.DS_Store
+
 config/global.js
 config/profile/*
 !config/profile/default.json

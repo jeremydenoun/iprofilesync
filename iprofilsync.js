@@ -2,7 +2,9 @@
 
 var tools = require('./src/lib/function.js');
 
+// non-interactive mode default
 global.interactive = false;
+
 var program = require('commander-sync');
 var util = require('util');
 
@@ -24,30 +26,31 @@ program
     .action(function(service, users, host, options){
 	    /* Adapter for checker */
 	    var Checker = require('./src/checker/'+ service +'.js');
-	    var chk = new Checker();
+	    var chk = new Checker({});
 	    var users_list = users.trim().split(",");
 
 	    chk.check(
-			      users_list,
-			      {
-				  host: host,
-				  privateKey: options.private_ssh_key || null,
-			          password: options.password || null,
-				  callback: function (err, data) {
-				      if (err)
-					  global.log(util.inspect(err, false, null));
-				      else
-					  global.log(util.inspect(data, false, null));
-				  }
-			      }
-	   );
+			host,
+			{
+				checker_users: users_list,
+                checker_private_key: options.private_ssh_key || null,
+                checker_ports: 22,
+			    password: options.password || null
+            },
+			function (err, data) {
+				if (err)
+					global.log(util.inspect(err, false, null));
+				else
+					global.log(util.inspect(data, false, null));
+			}
+	    );
 	}).on('--help', function() {
 		global.log('  Examples:');
 		global.log();
 		global.log('    $ check ssh root localhost');
 		global.log('    $ check ssh customer,www-data,root localhost');
 		global.log();
-	    });
+	});
 
 program
     .command('list <service>')
@@ -56,16 +59,16 @@ program
 	    var config = tools.import_json("config/profile/"+service+".json");
 
 	    if (!config)
-		return;
+		    return;
 	    if (!config.adapter)
-		config.adapter = "default";
+		    config.adapter = "default";
 
 	    try {
-		var ListAdapter = require('./src/adapter/'+config.adapter+'.js');
-		var lister = new ListAdapter(config);
-		global.log(util.inspect(lister.list(), { depth: null }));
+		    var ListAdapter = require('./src/adapter/'+config.adapter+'.js');
+		    var lister = new ListAdapter(config);
+		    global.log(util.inspect(lister.list(), { depth: null }));
 	    } catch (err) {
-		return;
+		    return;
 	    }
 
 	}).on('--help', function() {
@@ -74,7 +77,7 @@ program
 		global.log('    $ list default');
 		global.log('    $ list chef');
 		global.log();
-	    });
+	});
 
 
 program
@@ -84,23 +87,22 @@ program
 	    var config = tools.import_json("config/profile/"+service+".json");
 
 	    if (!config)
-		return;
+		    return;
 
 	    result = config;
 	    Object.keys(result).filter(function (v) {
 		    return !v.match(pattern);
 		}).forEach(function (v) {
 			delete result[v];
-		    });
+		});
 
 	    global.log(util.inspect(result, { depth: null }));
-
 	}).on('--help', function() {
 		global.log('  Examples:');
 		global.log();
 		global.log('    $ config default adapter');
 		global.log();
-	    });
+	});
 
 program
     .command('sync <service>')
@@ -109,16 +111,16 @@ program
 	    var config = tools.import_json("config/profile/"+service+".json");
 
 	    if (!config)
-		return;
+		    return;
 
 	    if (!config.adapter)
-		config.adapter = "default";
+		    config.adapter = "default";
 	    if (!config.checker)
-		config.checker = "default";
+		    config.checker = "default";
 	    if (!config.indexer)
-		config.indexer = "default";
+		    config.indexer = "default";
 	    if (!config.exporter)
-		config.exporter = "default";
+		    config.exporter = "default";
 
 	    //	    try {
         var Adapter = require('./src/adapter/'+config.adapter+'.js');
@@ -126,6 +128,7 @@ program
 		var Indexer = require('./src/indexer/'+ config.indexer +'.js');
 		var Exporter = require('./src/exporter/'+ config.exporter +'.js');
 
+        global.config = config;
 
         var adapter = new Adapter(config);
 		var checker = new Checker(config);
@@ -141,15 +144,16 @@ program
 
 		// check if nodes available if 0 nodes available => warning
 		nodes_check = checker.check_nodes(nodes_list, function(node_checked) {
-            global.log(node_checked);
-            process.exit(0);
-			// check if nodes indexedif 0 nodes available => warning
+			// check if nodes indexed if 0 nodes available => warning
 			indexer.index(node_checked, function(node_indexed) {
+                global.log(util.inspect(node_indexed, { depth: null }));
+                process.exit(0);
+
 				// try to export
 				exporter.export(nodes_indexed, function(result) {
-				    });
-			    });
-		    });
+				});
+			});
+		});
 
 		//global.log(util.inspect(nodes_index, { depth: null }));
 		// if debug warning
@@ -188,13 +192,6 @@ program
 if (process.argv.length == 2) {
     global.interactive = true;
     var readline = require('readline-history');
-    /*    rl = readline.createInterface({
-	    path: "/tmp/.its_history",
-	    maxLength: 1000,
-	    input: process.input,
-	    output: process.output,
-	    terminal: true,
-	    });*/
 
     rl = readline.createInterface({"path": "/tmp/.its_history", maxLength: 1000, "input" : process.stdin, "output" : process.stdout,
 				   "next": function (rl) {
