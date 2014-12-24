@@ -143,19 +143,17 @@ program
 		}
 
 		// check if nodes available if 0 nodes available => warning
-		nodes_check = checker.check_nodes(nodes_list, function(node_checked) {
+		nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
 			// check if nodes indexed if 0 nodes available => warning
-			indexer.index(node_checked, function(node_indexed) {
-                global.log(util.inspect(node_indexed, { depth: null }));
-                process.exit(0);
-
-				// try to export
+			indexer.index(nodes_checked, function(nodes_indexed) {
 				exporter.export(nodes_indexed, function(result) {
+                    global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
 				});
 			});
 		});
 
 		//global.log(util.inspect(nodes_index, { depth: null }));
+
 		// if debug warning
 		// notify if config
 
@@ -199,14 +197,6 @@ if (process.argv.length == 2) {
 		rl.prompt(true);
 		rl.on('line', function(line) {
 			program.parse(["", ""].concat(line.trim().split(" ")));
-			/*switch(line.trim()) {
-			case 'hello':
-			    global.log('world!');
-			    break;
-			default:
-			    global.log('command not found: `' + line.trim() + '`');
-			    break;
-			    }*/
 			rl.prompt(true);
 		    }).on('close', function() {
 			    tools.exit();

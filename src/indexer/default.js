@@ -95,7 +95,23 @@ module.exports = function (options) {
                         elt = _.clone(this[config.indexer_rules[j]](elt, host));
                     }
                 }
+
+                /* overwrite param for specific host */
+                if (global.config.indexer_specific_pref) {
+                    keys = _.keys(host);
+                    keys = _.difference(keys, ["checker"]);
+                    name = keys[0];
+
+                    for (j = 0, len2 = global.config.indexer_specific_pref.length; j < len2; ++j) {
+                        keys = _.keys(global.config.indexer_specific_pref[j]);
+                        if (name == keys[0]) {
+                            elt = _.extend(elt, global.config.indexer_specific_pref[j][name]);
+                        }
+                    }
+                }
+
                 _result.push(elt);
+
             }
         }
 	    return callback({"Profiles":_result});
