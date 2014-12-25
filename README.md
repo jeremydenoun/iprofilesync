@@ -29,7 +29,7 @@ With a simple configuration you can execute task like :
    * generate/sync a CMDB or inventory
    * check your SSH connectivity
    * Auto Tag your data
-   * sync your hosts with iTerm2 http://iterm2.com/
+   * sync your hosts with iTerm2 although dynamic profile *
 
 A cli is available for all command :
 ```sh
