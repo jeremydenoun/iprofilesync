@@ -18,16 +18,18 @@ iProfilSync dynamic profil exporter
 iProfilSync is a command line tool build for sync a data repository with another tools.
 
 We have 4 process steps :
-     * import data (adapter) - available in src/adapter/*
-     * launch check (checker) - available in src/checker/*
-     * format for export (indexer) - available in src/indexer/*
-     * write it (exporter) - available in src/exporter/*
+
+   * import data (adapter) - available in src/adapter/*
+   * launch check (checker) - available in src/checker/*
+   * format for export (indexer) - available in src/indexer/*
+   * write it (exporter) - available in src/exporter/*
 
 With a simple configuration you can execute task like :
-     * generate/sync a CMDB or inventory
-     * check your SSH connectivity
-     * Auto Tag your data
-     * sync your hosts with iTerm2 http://iterm2.com/
+
+   * generate/sync a CMDB or inventory
+   * check your SSH connectivity
+   * Auto Tag your data
+   * sync your hosts with iTerm2 http://iterm2.com/
 
 A cli is available for all command :
 ```sh
