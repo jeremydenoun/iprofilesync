@@ -69,6 +69,7 @@ node iprofilsync.js
 ```
 
 You can launch command with cli or directly with command line :
+
 ```sh
 node iprofilsync.js config default
 { adapter: 'default',
@@ -83,7 +84,8 @@ export completed for chef : 42 nodes exported
 
 ### Configuration
 
-We use JSON import workaround permit us to add comment into JSON configuration file
+You should write your own configuration into config/profile/ directory and use it like a **service** into command line.
+*We use JSON import workaround permit us to add comment into JSON configuration file*
 
 ```sh
 {
