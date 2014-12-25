@@ -25,9 +25,10 @@
     "checker_private_ssh_options": "-o ProxyCommand=\"ssh -W %h:%p root@{proxy-server-for-internal}\"", /* proxy ssh command for internal */
 
 
-	"indexer" : "default",
+	"indexer" : "iterm2",
 	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
 	"indexer_static_template" : {
+        "Default Bookmark" : "No",
 		"Custom Command" : "Yes",
 		"ASCII Anti Aliased" : true
 	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key */

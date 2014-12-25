@@ -14,8 +14,13 @@ module.exports = function (options) {
         if (global.config.exporter_format == "json")
             Plist.writeBinaryFileSync(expandHomedir(global.config.exporter_path), data);
 
-        global.log("=> \""+expandHomedir(global.config.exporter_path)+"\"");
-        nb_elt = data.Profiles.length;
+        if (typeof global.config.exporter_path != "undefined")
+            global.log("=> \""+expandHomedir(global.config.exporter_path)+"\"");
+
+        nb_elt = data.length - 1;
+        if (typeof data.Profiles != "undefined")
+            nb_elt = data.Profiles.length;
+
 	    return callback(nb_elt);
     }
 }
