@@ -68,6 +68,7 @@ program
 		    var lister = new ListAdapter(config);
 		    global.log(util.inspect(lister.list(), { depth: null }));
 	    } catch (err) {
+            global.err("Unable to load src/adapter/"+config.adapter+".js adapter");
 		    return;
 	    }
 
@@ -107,6 +108,7 @@ program
 program
     .command('sync <service>')
     .description('launch sync based on service config/profile/{service}.conf')
+    .option("-d, --debug", "Debug display")
     .action(function(service, options){
 	    var config = tools.import_json("config/profile/"+service+".json");
 
@@ -142,10 +144,14 @@ program
 		    return;
 		}
 
-		// check if nodes available if 0 nodes available => warning
+        if (options.debug)
+            global.log("Adapter nodes list : \n" + util.inspect(nodes_list, { depth: null }));
 		nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
-			// check if nodes indexed if 0 nodes available => warning
+            if (options.debug)
+                global.log("Checker step : \n" + util.inspect(nodes_checked, { depth: null }));
 			indexer.index(nodes_checked, function(nodes_indexed) {
+                if (options.debug)
+                    global.log("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
 				exporter.export(nodes_indexed, function(result) {
                     global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
 				});

@@ -17,14 +17,18 @@ module.exports = function (options) {
     }
 
     this.tags = function(elt, host) {
-        tags = _.clone(global.config.indexer_global_tags) || [];
+        tags = _.clone(global.config.indexer_global_generic_tag) || [];
         keys = _.keys(host);
         keys = _.difference(keys, ["checker"]);
         name = keys[0];
         n = name.split(".")[0];
-        t = n.split("-")[1] || null;
-        if (t)
-            tags.push(t);
+        n_group = n.split(global.config.indexer_global_name_separator || "-");
+
+        for (z = 0, l_tag = n_group.length; z < l_tag; ++z) {
+            if (_.indexOf(tags, n_group[z]) == -1 &&
+                !parseInt(n_group[z]))
+                tags.push(n_group[z]);
+        }
 
         elt.Tags = tags;
         return elt;

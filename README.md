@@ -55,7 +55,7 @@ node iprofilsync.js
     config <service> [pattern]
        display config (pattern key based) for services config/profile/{service}.conf
 
-    sync <service>
+    sync [options] <service>
        launch sync based on service config/profile/{service}.conf
 
     help
@@ -133,7 +133,9 @@ You should write your own configuration into config/profile/ directory and use i
                               },
 
     "indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
-    "indexer_global_tags" : [ "{global tag}" ], /* global tag for each node */
+    "indexer_global_name_separator" : "-", /* separator for name field by example web-01 => "-" | default : "-" */
+    "indexer_global_generic_tag" : [ "{global tag}" ], /* global tag for each node */
+    "indexer_global_ignore_tag" : [ "{ignore tag}" ], /* remove this tag list */
     "indexer_global_command" : "ssh -A", /* global command for each node */
     "indexer_specific_pref" : [ {"localhost": {"Custom Command" : "Yes"} } ], /* specify template preference for node name */
 

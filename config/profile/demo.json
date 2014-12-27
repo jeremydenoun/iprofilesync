@@ -32,7 +32,9 @@
 		"Custom Command" : "Yes",
 		"ASCII Anti Aliased" : true
 	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key */
-    "indexer_global_tag" : [ "{global tag}" ], /* global tag for each node */
+    "indexer_global_name_separator" : "-", /* separator for name field by example web-01 => "-" | default : "-" */
+    "indexer_global_generic_tag" : [ "{global tag}" ], /* global tag for each node */
+    "indexer_global_ignore_tag" : [ "{ignore tag}" ], /* remove this tag list */
     "indexer_global_command" : "ssh -A", /* global command for each node */
 	"indexer_specific_pref" : [ {"localhost": {"Custom Command" : "Yes"} } ], /* specify template preference for node name */
 
