@@ -124,48 +124,47 @@ program
 	    if (!config.exporter)
 		    config.exporter = "default";
 
-	    //	    try {
-        var Adapter = require('./src/adapter/'+config.adapter+'.js');
-		var Checker = require('./src/checker/'+ config.checker +'.js');
-		var Indexer = require('./src/indexer/'+ config.indexer +'.js');
-		var Exporter = require('./src/exporter/'+ config.exporter +'.js');
+	    try {
+            var Adapter = require('./src/adapter/'+config.adapter+'.js');
+		    var Checker = require('./src/checker/'+ config.checker +'.js');
+		    var Indexer = require('./src/indexer/'+ config.indexer +'.js');
+		    var Exporter = require('./src/exporter/'+ config.exporter +'.js');
 
-        global.config = config;
+            global.config = config;
 
-        var adapter = new Adapter(config);
-		var checker = new Checker(config);
-		var indexer = new Indexer(config);
-		var exporter = new Exporter(config);
+            var adapter = new Adapter(config);
+		    var checker = new Checker(config);
+		    var indexer = new Indexer(config);
+		    var exporter = new Exporter(config);
 
-        var nodes_list = adapter.list();
+            var nodes_list = adapter.list();
 
-		if (nodes_list.length == 0) {
-		    global.warn("no nodes found");
-		    return;
-		}
+		    if (nodes_list.length == 0) {
+		        global.warn("no nodes found");
+		        return;
+		    }
 
-        if (options.debug)
-            global.log("Adapter nodes list : \n" + util.inspect(nodes_list, { depth: null }));
-		nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
             if (options.debug)
-                global.log("Checker step : \n" + util.inspect(nodes_checked, { depth: null }));
-			indexer.index(nodes_checked, function(nodes_indexed) {
+                global.debug("Adapter nodes list : \n" + util.inspect(nodes_list, { depth: null }));
+		    nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
                 if (options.debug)
-                    global.log("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
-				exporter.export(nodes_indexed, function(result) {
-                    global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
-				});
-			});
-		});
+                    global.debug("Checker step : \n" + util.inspect(nodes_checked, { depth: null }));
+			    indexer.index(nodes_checked, function(nodes_indexed) {
+                    if (options.debug)
+                        global.debug("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
+				    exporter.export(nodes_indexed, function(result) {
+                        global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
+				    });
+			    });
+		    });
 
 		//global.log(util.inspect(nodes_index, { depth: null }));
 
-		// if debug warning
-		// notify if config
-
-		//} catch (err) {
-                //return;
-		//}
+		} catch (err) {
+            global.error("An error occured with this profil. Please check your configuration (or run with debug option) !");
+            if (options.debug)
+                global.debug(err);
+		}
 
 	}).on('--help', function() {
 		global.log('  Examples:');

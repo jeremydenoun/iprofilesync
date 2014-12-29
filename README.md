@@ -78,7 +78,7 @@ node iprofilsync.js config default
   exporter: 'default' }
 
 node iprofilsync sync chef
-=> "/Users/denoun_j/Library/Application Support/iTerm2/DynamicProfiles/chef.plist"
+=> "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist"
 export completed for chef : 42 nodes exported
 ```
 
@@ -89,7 +89,7 @@ You should write your own configuration into config/profile/ directory and use i
 
 ```sh
 {
-    "adapter" : "chef", /* support : default / file / chef */
+    "adapter" : "chef", /* support : default / file / chef / chef_knife */
 
     /* specific config for file adapter */
     "adapter_file_path": "~/xxx", /* JSON data store path format with [{"host1":{"ipaddress":"127.0.0.1"}},{"host2":{"ipaddress":"127.0.0.1"}}] */
