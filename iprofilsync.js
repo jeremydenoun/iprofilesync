@@ -5,7 +5,7 @@ var tools = require('./src/lib/function.js');
 // non-interactive mode default
 global.interactive = false;
 
-var program = require('commander-sync');
+var program = require('commander');
 var util = require('util');
 
 // check winston or loglevel for logging
