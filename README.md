@@ -1,5 +1,8 @@
 iProfilSync dynamic profil exporter
 ===
+[![Code Climate](https://codeclimate.com/github/jeremydenoun/iprofilsync/badges/gpa.svg)](https://codeclimate.com/github/jeremydenoun/iprofilsync)
+[![Test Coverage](https://codeclimate.com/github/jeremydenoun/iprofilsync/badges/coverage.svg)](https://codeclimate.com/github/jeremydenoun/iprofilsync)
+[![NPM dependencies](https://david-dm.org/jeremydenoun/iprofilsync.png)](https://david-dm.org/jeremydenoun/iprofilsync)
 
 ### Prerequisites :
 
@@ -8,6 +11,7 @@ iProfilSync dynamic profil exporter
           * nothing
     * for chef usage :
           * correct knife configuration (tested with Chef: 11.12.8)
+          * or user name / private key and server url
     * for puppet usage : (*TODO*)
           * credentials
     * for vmware usage : (*TODO*)

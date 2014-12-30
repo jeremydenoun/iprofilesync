@@ -2,60 +2,34 @@ var Path = require('path-extra');
 var Fs   = require('fs');
 var _    = require('underscore');
 var shell = require("shelljs");
+var util = require('util');
 var tools = require('../lib/function.js');
+var chef = require('chef');
 
 module.exports = function (options) {
     this.list = function () {
 	    shell.config.silent = true;
 
-	    /* Override cmd */
-	    default_cmd = 'knife search node "name:*" -a ipaddress --format json';
-	    if (options.adapter_chef_custom_cmd)
-	        default_cmd = options.adapter_chef_custom_cmd;
-
-	    /* CD to correct dir */
-	    if (options.adapter_chef_home)
-	        shell.cd(options.adapter_chef_home);
-
 	    try {
-	        list = JSON.parse(shell.exec(default_cmd).output.trim());
-            /* manual list union */
-            if (options.adapter_manual) {
-                list.rows = _.union(list.rows, options.adapter_manual);
-            }
+            /* chef api call */
+            key = Fs.readFileSync(options.adapter_chef_key_user_path),
+            client = chef.createClient(options.adapter_chef_username, key, options.adapter_chef_url);
 
-            /* overwrite list */
-            if (options.adapter_alias) {
-                for (i = 0, len = options.adapter_alias.length; i < len; ++i) {
-                    var idx = -1;
-                    keys = _.keys(options.adapter_alias[i]);
-                    _.find(list.rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys[0]; });
-                    if (idx != -1) {
-                        list.rows[idx] = options.adapter_alias[i];
-                    }
-                }
-            }
+            client.get('/search/node?q=name%253A*&sort=&start=0&rows=9999', function(err, res, body) {
+                console.log(_.map(body.rows, function (obj) {
+                    var res = {};
+                    res[obj.automatic.fqdn] = {"ipaddress":obj.automatic.ipaddress};
+                    return res;
+                }));
+            });
 
-            /* remove ignore list */
-            if (options.adapter_ignore) {
-                for (i = 0, len = options.adapter_ignore.length; i < len; ++i) {
-                    var idx = -1;
-                    keys = options.adapter_ignore[i];
-                    _.find(list.rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys; });
-                    if (idx != -1) {
-                        delete list.rows[idx];
-                    }
-                }
-            }
+//	        list = JSON.parse(shell.exec(default_cmd).output.trim());
+            rows = {};
+	        return tools.override_adapter_list(rows, options);
 
-            /* export for fallback */
-            if (options.adapter_chef_fallback_update && options.adapter_chef_fallback_file)
-                tools.export_data("json", list.rows, options.adapter_chef_fallback_file);
-
-	        return list.rows;
 	    } catch (err) {
             global.log(err);
-            global.log("Main cmd '"+default_cmd+"' ("+options.adapter_chef_home+") report invalid JSON. I fallback on : " + options.adapter_chef_fallback_file);
+            global.log("Unable to access to chef server '"+options.adapter_chef_url+"' ("+options.adapter_chef_username+") I fallback on : " + options.adapter_chef_fallback_file);
 
             /* restore from fallback */
             if (options.adapter_chef_fallback_file && Fs.existsSync(options.adapter_chef_fallback_file))

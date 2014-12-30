@@ -2,6 +2,8 @@ var Path = require('path-extra');
 var Fs   = require('fs');
 var _    = require('underscore');
 var shell = require("shelljs");
+var expandHomedir = require('expand-home-dir');
+var diff = require('changeset');
 
 var exit = function(ret) {
     global.log("Good Bye");
@@ -65,14 +67,62 @@ cleaner = function(data) {
 
 var export_data = function(format, data, target) {
     if (format == "json")
-        return Fs.writeFileSync(target, JSON.stringify(data, null, '  '));
+        return Fs.writeFileSync(expandHomedir(target), JSON.stringify(data, null, '  '));
     if (format == "plist")
-        return Plist.writeFileSync(target, cleaner(data));
+        return Plist.writeFileSync(expandHomedir(target), cleaner(data));
     if (format == "bplist")
-        return Plist.writeBinaryFileSync(target, cleaner(data));
+        return Plist.writeBinaryFileSync(expandHomedir(target), cleaner(data));
+}
+
+var override_adapter_list = function(rows, options) {
+    /* manual list union */
+    if (options.adapter_manual) {
+        rows = _.union(rows, options.adapter_manual);
+    }
+
+    /* overwrite list */
+    if (options.adapter_alias) {
+        for (i = 0, len = options.adapter_alias.length; i < len; ++i) {
+            var idx = -1;
+            keys = _.keys(options.adapter_alias[i]);
+            _.find(rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys[0]; });
+            if (idx != -1) {
+                rows[idx] = options.adapter_alias[i];
+            }
+        }
+    }
+
+    /* remove ignore list */
+    if (options.adapter_ignore) {
+        for (i = 0, len = options.adapter_ignore.length; i < len; ++i) {
+            var idx = -1;
+            keys = options.adapter_ignore[i];
+            _.find(rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys; });
+            if (idx != -1) {
+                delete rows[idx];
+            }
+        }
+    }
+
+    /* export for fallback */
+    if (options.adapter_chef_fallback_update && options.adapter_chef_fallback_file)
+        export_data("json", rows, options.adapter_chef_fallback_file);
+
+    return rows;
+}
+
+var changeset_object = function(source, dest) {
+    global.log("Changeset : ");
+    changeset = diff(source, dest);
+    if (changeset.length > 0)
+        global.log(changeset);
+    else
+        global.log("No change");
 }
 
 
 module.exports.exit = exit;
 module.exports.import_json = import_json;
 module.exports.export_data = export_data;
+module.exports.override_adapter_list = override_adapter_list;
+module.exports.changeset_object = changeset_object;

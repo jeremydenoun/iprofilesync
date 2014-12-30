@@ -6,7 +6,7 @@
 
     /* custom config for chef adapter */
 	"adapter_chef_username": "{username}", /* API username */
-	"adapter_chef_key_path": "{pathname}", /* private key path */
+	"adapter_chef_key_user_path": "{private key path}", /* private key path */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
     /* custom config for chef_knife adapter */
@@ -52,6 +52,7 @@
 
 	"exporter" : "default", /* default */
 	"exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist", /* node name to exclude */
+    "exporter_print_diff" : true, /* print diff before write */
 	"exporter_format" : "plist", /* json / plist / bplist */
 
 	"log_level" : "error", /* TODO none / debug / warning / error */
