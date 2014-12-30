@@ -4,14 +4,26 @@ util = require('util'),
 _    = require('underscore'),
 key = fs.readFileSync('/Users/denoun_j/chef-repo/voxapp/.chef/denoun_j.pem'),
 client = chef.createClient('denoun_j', key, 'https://vox-chef-01.voxapp.lu');
+var async = require('async');
 
 //console.log(client.get('/search/node?q=name%253A*&sort=&start=0&rows=9999'));
- 
-client.get('/search/node?q=name%253A*&sort=&start=0&rows=9999', function(err, res, body) {
-    //console.log(util.inspect(body.rows, { depth: null }));
-    console.log(_.map(body.rows, function (obj) {
-        var res = {};
-        res[obj.automatic.fqdn] = {"ipaddress":obj.automatic.ipaddress};
-        return res;
-    }));
-});
+
+function load() {
+    var result = {};
+    async.series([
+        function client_load() {
+            client.get('/search/node?q=name%253A*&sort=&start=0&rows=9999', functio);
+        },
+        function return_result(err, res, body) {
+            //console.log(util.inspect(body.rows, { depth: null }));
+            console.log("DS");
+            _.map(body.rows, function (obj) {
+                result[obj.automatic.fqdn] = {"ipaddress":obj.automatic.ipaddress};
+                return result;
+            });
+        }
+    );
+//    return result;
+}
+
+console.log(load());

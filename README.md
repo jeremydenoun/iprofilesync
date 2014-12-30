@@ -21,10 +21,10 @@ All dependencies are included in node_modules/ in a correct version and describe
 
 Actually 3 npm modules are customized for assure correct behavior :
 
-    * chef (0.3.0-custom) => I don't want node-gyp dependancies so I replace forsake usage 
-    by rsautl wrapper module customized by myself to be synchronous (if no callback provided)
+    * chef (0.3.0-custom) => I replace forsake usage by rsautl wrapper module customized by myself
+    to be synchronous (if no callback provided)
     * commander (2.3.0-custom) => I would like a "interactive cli" so I add it
-    * simple-plist (0.0.3-custom) => This module use deprecated plist function so I fix it 
+    * simple-plist (0.0.3-custom) => This module use deprecated plist function so I fix it
     (we can merge with master if they fix it)
 
 ### Usage

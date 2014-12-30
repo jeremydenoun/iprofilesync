@@ -137,26 +137,25 @@ program
 		    var indexer = new Indexer(config);
 		    var exporter = new Exporter(config);
 
-            var nodes_list = adapter.list();
-
-		    if (nodes_list.length == 0) {
-		        global.warn("no nodes found");
-		        return;
-		    }
-
-            if (options.debug)
-                global.debug("Adapter nodes list : \n" + util.inspect(nodes_list, { depth: null }));
-		    nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
+            adapter.list(function(nodes_list) {
+		        if (nodes_list.length == 0) {
+		            global.warn("no nodes found");
+		            return;
+		        }
                 if (options.debug)
-                    global.debug("Checker step : \n" + util.inspect(nodes_checked, { depth: null }));
-			    indexer.index(nodes_checked, function(nodes_indexed) {
+                    global.debug("Adapter nodes list : \n" + util.inspect(nodes_list, { depth: null }));
+		        nodes_check = checker.check_nodes(nodes_list, function(nodes_checked) {
                     if (options.debug)
-                        global.debug("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
-				    exporter.export(nodes_indexed, function(result) {
-                        global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
-				    });
-			    });
-		    });
+                        global.debug("Checker step : \n" + util.inspect(nodes_checked, { depth: null }));
+			        indexer.index(nodes_checked, function(nodes_indexed) {
+                        if (options.debug)
+                            global.debug("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
+				        exporter.export(nodes_indexed, function(result) {
+                            global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
+				        });
+			        });
+		        });
+            });
 
 		//global.log(util.inspect(nodes_index, { depth: null }));
 
