@@ -13,6 +13,7 @@
 	"adapter_chef_home": "{your knife repo}",
 	"adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
 
+     /* custom config for chef* adapter */
     "adapter_chef_fallback_update": true, /* if true update fallback_file file if chef return one node or more */
     "adapter_chef_fallback_file": "{your knife repo}/nodes.json", /* use this file as source if knife cmd return 0 node */
 
