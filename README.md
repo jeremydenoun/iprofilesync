@@ -20,9 +20,12 @@ iProfilSync dynamic profil exporter
 All dependencies are included in node_modules/ in a correct version and describe in package.json you can show it with npm list.
 
 Actually 3 npm modules are customized for assure correct behavior :
-    * chef (0.3.0-custom) => I don't want node-gyp dependancies so I replace forsake usage by rsautl wrapper module customized by myself to be synchronous (if no callback provided)
+
+    * chef (0.3.0-custom) => I don't want node-gyp dependancies so I replace forsake usage 
+    by rsautl wrapper module customized by myself to be synchronous (if no callback provided)
     * commander (2.3.0-custom) => I would like a "interactive cli" so I add it
-    * simple-plist (0.0.3-custom) => This module use deprecated plist function so I fix it (we can merge with master if they fix it)
+    * simple-plist (0.0.3-custom) => This module use deprecated plist function so I fix it 
+    (we can merge with master if they fix it)
 
 ### Usage
 
@@ -102,15 +105,22 @@ You should write your own configuration into config/profile/ directory and use i
 {
     "adapter" : "chef", /* support : default / file / chef / chef_knife */
 
-    /* specific config for file adapter */
-    "adapter_file_path": "~/xxx", /* JSON data store path format with [{"host1":{"ipaddress":"127.0.0.1"}},{"host2":{"ipaddress":"127.0.0.1"}}] */
+    /* custom config for file adapter */
+	"adapter_file_path": "{path}", /* JSON data path must respect syntax like [ { "localhost": {"ipaddress" : "127.0.0.1"} } ] */
 
-    /* specific config for chef adapter */
-    "adapter_chef_home": "{your knife repo}",
+    /* custom config for chef adapter */
+	"adapter_chef_username": "{username}", /* API username */
+	"adapter_chef_key_user_path": "{private key path}", /* private key path */
+	"adapter_chef_url": "{url}", /* chef server url  */
+
+    /* custom config for chef_knife adapter */
+	"adapter_chef_home": "{your knife repo}",
+	"adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
+
+     /* custom config for chef* adapter */
     "adapter_chef_fallback_update": true, /* if true update fallback_file file if chef return one node or more */
     "adapter_chef_fallback_file": "{your knife repo}/nodes.json", /* use this file as source if knife cmd return 0 node */
-    "adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
-
+    
     "adapter_suffix" : "", /* we check strict hostname first and if this fail we try to fallback on hostname+adapter_suffix (think to "dot" first) */
     "adapter_force_suffix": false, /* if true check with suffix will be more important than check without suffix */
     "adapter_ignore" : [ ], /* host (node) to ignore */
