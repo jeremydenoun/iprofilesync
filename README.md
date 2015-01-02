@@ -167,9 +167,9 @@ You should write your own configuration into config/profile/ directory and use i
 
 ```
 
-### Example
+### Known Issues
 
-@TODO
+    * Checker SSH - If you specify N ssh users (checker_users) for a profile and all users have ssh access it's the first success callback win but if another success callback with prior username position in checker_users config they will be override but for determine if we have finish we wait one callback for each node so we can determine finish before receive success callback so for the moment we recommend to use checker_specific_pref for determine right user, in next release we will wait all ssh checking callback for be sure to have consistent system
 
 
 ### Link
