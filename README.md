@@ -103,14 +103,14 @@ You should write your own configuration into config/profile/ directory and use i
 
 ```sh
 {
-    "adapter" : "chef", /* support : default / file / chef / chef_knife */
+	"adapter" : "chef", /* support : default / file / chef / chef_knife */
 
     /* custom config for file adapter */
 	"adapter_file_path": "{path}", /* JSON data path must respect syntax like [ { "localhost": {"ipaddress" : "127.0.0.1"} } ] */
 
     /* custom config for chef adapter */
-	"adapter_chef_username": "{username}", /* chef username */
-	"adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
+    "adapter_chef_username": "{username}", /* chef username */
+    "adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
     /* custom config for chef_knife adapter */
@@ -121,51 +121,50 @@ You should write your own configuration into config/profile/ directory and use i
     "adapter_chef_fallback_update": true, /* if true update fallback_file file if chef return one node or more */
     "adapter_chef_fallback_file": "{your knife repo}/nodes.json", /* use this file as source if knife cmd return 0 node */
 
-    "adapter_suffix" : "", /* we check strict hostname first and if this fail we try to fallback on hostname+adapter_suffix (think to "dot" first) */
-    "adapter_force_suffix": false, /* if true check with suffix will be more important than check without suffix */
-    "adapter_ignore" : [ ], /* host (node) to ignore */
-    "adapter_alias" : [ { "localhost": {"ipaddress" : "127.0.0.1"} } ], /* define a list of alias overwrite output */
-    "adapter_manual" :  [ { "localhost": {"ipaddress" : "127.0.1.1"} } ], /* define a list of additional host */
+	"adapter_suffix" : "", /* TODO we check strict hostname first and if this fail we try to fallback on hostname+adapter_suffix (think to "dot" first) */
+	"adapter_force_suffix": false, /* TODO if true check with suffix will be more important than check without suffix */
+	"adapter_ignore" : [ ], /* host (node) to ignore */
+	"adapter_alias" : [ { "localhost": {"ipaddress" : "127.0.0.1"} } ], /* define a list of alias overwrite output */
+	"adapter_manual" :  [ { "localhost": {"ipaddress" : "127.0.1.1"} } ], /* define a list of additional host */
 
 
-    "checker" : "ssh", /* support : default / ssh */
-
-    /* specific config for ssh checker */
-    "checker_users" : ["root","customer"], /* user name preference list */
-    "checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
-    "checker_password" : false, /* default password */
-    "checker_ports" : [22], /* ssh ports list */
-    "checker_additional_options" : "-A", /* options add to connection string for export */
+	"checker" : "ssh", /* support : default / ssh */
+	"checker_users" : ["root","customer"], /* user name preference list */
+	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
+	"checker_password" : false, /* default password */
+	"checker_ports" : [22, 42042], /* ssh ports list */
+	"checker_additional_options" : "-A", /* options add to connection string for export */
     "checker_force_success" : false, /* specific bool for force checker to always validate entry */
-    "checker_specific_pref" : [ {"localhost": {"users": "root"} } ], /* specif user for specific node */
+	"checker_specific_pref" : [ {"localhost": {"user": "root"} } ], /* specif user for specific node */
     "checker_private_user" : "root", /* user for private area */
     "checker_private_port" : "22", /* port for private area */
     "checker_private_prefix": "10.", /* prefix ip for private area */
     "checker_private_ssh_options": "-o ProxyCommand=\"ssh -W %h:%p root@{proxy-server-for-internal}\"", /* proxy ssh command for internal */
 
 
-    "indexer" : "iterm2", /* support : default / iterm2 */
-
-    /* define standard config for node, you can check src/indexer/iterm2_model for available key */
-    "indexer_static_template" : {
+	"indexer" : "iterm2", /* support : default / iterm2 */
+	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
+	"indexer_static_template" : {
         "Default Bookmark" : "No",
-                 "Custom Command" : "Yes",
-                         "ASCII Anti Aliased" : true
-                              },
-
-    "indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
+		"Custom Command" : "Yes",
+		"ASCII Anti Aliased" : true
+	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key */
     "indexer_global_name_separator" : "-", /* separator for name field by example web-01 => "-" | default : "-" */
     "indexer_global_generic_tag" : [ "{global tag}" ], /* global tag for each node */
     "indexer_global_ignore_tag" : [ "{ignore tag}" ], /* remove this tag list */
     "indexer_global_command" : "ssh -A", /* global command for each node */
-    "indexer_specific_pref" : [ {"localhost": {"Custom Command" : "Yes"} } ], /* specify template preference for node name */
+	"indexer_specific_pref" : [ {"localhost": {"Custom Command" : "Yes"} } ], /* specify template preference for node name */
 
-    "exporter" : "default", /* support : default */
-    "exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist", /* export path + filename */
-    "exporter_format" : "plist", /* json / plist / bplist */
+	"exporter" : "default", /* default */
+	"exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist", /* node name to exclude */
+    "exporter_print_diff" : true, /* print diff before write */
+	"exporter_format" : "plist", /* json / plist / bplist */
 
-    "log_level" : "error", /* none / debug / warning / error */
+	"log_level" : "error", /* TODO none / debug / warning / error */
+	"notify_sync_error" : "none", /* TODO value : none / mail / url_callback / script */
+	"notify_sync_data" : "" /* TODO mail / url / path script (log in parameter) */
 }
+
 ```
 
 ### Example

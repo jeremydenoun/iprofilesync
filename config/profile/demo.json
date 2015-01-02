@@ -5,8 +5,8 @@
 	"adapter_file_path": "{path}", /* JSON data path must respect syntax like [ { "localhost": {"ipaddress" : "127.0.0.1"} } ] */
 
     /* custom config for chef adapter */
-	"adapter_chef_username": "{username}", /* API username */
-	"adapter_chef_key_user_path": "{private key path}", /* private key path */
+    "adapter_chef_username": "{username}", /* chef username */
+    "adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
     /* custom config for chef_knife adapter */
