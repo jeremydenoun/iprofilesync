@@ -32,7 +32,7 @@
         SshCheck.prototype.check = function(host, data, callback) {
             data = _.extend(this.options, data);
 
-            var errored, f, k, key, port, ports, ran, succeeded, user, users, _i, _j, _len, _len1, _ref, _ref1, _results;
+            var errored, f, k, key, port, ports, ran, succeeded, user, users, _i, _j, _len, _len1, _ref, _users, _results;
             if (data.hasOwnProperty('checker_private_key') && data.checker_private_key) {
                 if (!Fs.existsSync(data.checker_private_key)) {
                     process.nextTick(function() {
@@ -60,7 +60,7 @@
             }
             data.privateKey = Fs.readFileSync(data.privateKey).toString();
 
-            users = data.checker_users instanceof Array ? data.checker_users : [(_ref1 = data.checker_users) != null ? _ref1 : process.env.USER];
+            users = data.checker_users instanceof Array ? data.checker_users : [(_users = data.checker_users) != null ? _users : process.env.USER];
             ports = data.checker_ports instanceof Array ? data.checker_ports : [data.checker_ports];
 
             if (data.hasOwnProperty('checker_password') && typeof data.password == "undefined")
@@ -155,7 +155,7 @@
             for (key in data) {
                 _results.push((function(self, key) {
                     var host = data[key];
-
+                    var hostname = Object.keys(data[key])[0].split(".")[0];
                     if (typeof data[key] == "object" && typeof data[key][Object.keys(data[key])[0]].ipaddress != "undefined")
                         host=data[key][Object.keys(data[key])[0]].ipaddress;
 
@@ -163,6 +163,8 @@
                         if (!obj)
                             obj = {};
 
+                        // detect if we are on private range
+                        //@TODO: we should test if we can connect althrough the proxy set
                         if (global.config.checker_private_prefix){
                             obj.private_range = (host.indexOf(global.config.checker_private_prefix) > -1);
                             if (host.indexOf(global.config.checker_private_prefix) > -1) {
@@ -173,16 +175,39 @@
                             }
                         }
 
+                        // override success
                         if (!err || global.config.checker_force_success) {
+                            // @TODO: if really not success fill user by first checker_user mention
                             obj.success = true;
                         } else {
                             obj.success = false;
                             obj.error = err;
                         }
 
-                        done[key] = true;
-                        data[key].checker = obj;
+                        // override user field with specific pref config
+                        // @TODO: merge with user preference order
+                        if (typeof global.config.checker_specific_pref != "undefined" && obj.success) {
+                            var idx = -1;
+                            _.find(global.config.checker_specific_pref, function(o, i){
+                                if (_.keys(o)[0] == hostname) idx = i; return _.keys(o)[0] == hostname;
+                            });
+                            if (idx != -1) {
+                                obj.user = global.config.checker_specific_pref[idx][hostname].user;
+                            }
+                        }
 
+                        // user preference order based on array field
+                        if (done[key] != true) {
+                            done[key] = true;
+                            data[key].checker = obj;
+                        } else {
+                            if ((obt.success == true && data[key].checker.success == false) ||
+                                (_.indexOf(global.config.checker_users, obj.user) < _.indexOf(global.config.checker_users, data[key].checker.user)))
+                                data[key].checker = obj;
+                        }
+
+                        // @TODO: replace this simple end callback detection by an intelligent system based on predictive number of callback and a scoring
+                        // when we have success or failure for detect end of work for each node
                         if (Object.keys(data).length === Object.keys(done).length) {
                             return callback(data);
                         }

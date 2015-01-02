@@ -4,6 +4,7 @@ var _    = require('underscore');
 var shell = require("shelljs");
 var expandHomedir = require('expand-home-dir');
 var diff = require('changeset');
+var Plist = require('simple-plist');
 
 var exit = function(ret) {
     global.log("Good Bye");
@@ -65,7 +66,17 @@ cleaner = function(data) {
     }
 };
 
-var export_data = function(format, data, target) {
+var export_data = function(format, data, target, display_changeset) {
+    if (typeof display_changeset != "undefined" && display_changeset) {
+        if (format == "json")
+            actual = import_json(expandHomedir(target));
+        if (format == "plist")
+            actual = Plist.readFileSync(expandHomedir(target));
+        if (format == "bplist")
+            actual = Plist.readBinaryFileSync(expandHomedir(target));
+        changeset_object(actual, data);
+    }
+
     if (format == "json")
         return Fs.writeFileSync(expandHomedir(target), JSON.stringify(data, null, '  '));
     if (format == "plist")
@@ -74,13 +85,23 @@ var export_data = function(format, data, target) {
         return Plist.writeBinaryFileSync(expandHomedir(target), cleaner(data));
 }
 
+
+// internal compare function for sorting
+function compare_array_object(a, b) {
+    if (_.keys(a)[0] < _.keys(b)[0])
+     return -1;
+    if (_.keys(a)[0] > _.keys(b)[0])
+        return 1;
+    return 0;
+}
+
 var override_adapter_list = function(rows, options) {
-    /* manual list union */
+    // manual list union
     if (options.adapter_manual) {
         rows = _.union(rows, options.adapter_manual);
     }
 
-    /* overwrite list */
+    // overwrite list
     if (options.adapter_alias) {
         for (i = 0, len = options.adapter_alias.length; i < len; ++i) {
             var idx = -1;
@@ -92,7 +113,7 @@ var override_adapter_list = function(rows, options) {
         }
     }
 
-    /* remove ignore list */
+    // remove ignore list
     if (options.adapter_ignore) {
         for (i = 0, len = options.adapter_ignore.length; i < len; ++i) {
             var idx = -1;
@@ -104,13 +125,17 @@ var override_adapter_list = function(rows, options) {
         }
     }
 
-    /* export for fallback */
+    // Assure sorting for re-entrance
+    rows.sort(compare_array_object);
+
+    // export for fallback
     if (options.adapter_chef_fallback_update && options.adapter_chef_fallback_file)
         export_data("json", rows, options.adapter_chef_fallback_file);
 
     return rows;
 }
 
+// Display a changeset of update between source and dest can be improved with colors and format
 var changeset_object = function(source, dest) {
     global.log("Changeset : ");
     changeset = diff(source, dest);
@@ -120,9 +145,9 @@ var changeset_object = function(source, dest) {
         global.log("No change");
 }
 
-
 module.exports.exit = exit;
 module.exports.import_json = import_json;
 module.exports.export_data = export_data;
 module.exports.override_adapter_list = override_adapter_list;
 module.exports.changeset_object = changeset_object;
+

@@ -3,7 +3,7 @@ var Fs   = require('fs');
 var _    = require('underscore');
 
 module.exports = function (options) {
-    this.list = function () {
-	return ["localhost"];
+    this.list = function (callback) {
+	callback([{"localhost":{"ipaddress": "127.0.0.1"}}]);
     }
 }

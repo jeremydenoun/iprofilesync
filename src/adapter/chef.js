@@ -16,12 +16,13 @@ module.exports = function (options) {
             key = Fs.readFileSync(expandHomedir(options.adapter_chef_key_user_path)),
             client = chef.createClient(options.adapter_chef_username, key, options.adapter_chef_url);
 
-            client.get('/search/node?q=name%253A*&sort=&start=0&rows=9999', function(err, res, body) {
+            client.get('/search/node?q=name%253A*&start=0&rows=9999', function(err, res, body) {
                 var rows = _.map(body.rows, function (obj) {
                     var res = {};
                     res[obj.automatic.fqdn] = {"ipaddress":obj.automatic.ipaddress};
                     return res;
                 });
+
                 callback(tools.override_adapter_list(rows, options));
             });
 	    } catch (err) {
