@@ -152,6 +152,7 @@ program
                             global.debug("Indexer result : \n" + util.inspect(nodes_indexed, { depth: null }));
 				        exporter.export(nodes_indexed, function(result) {
                             global.log("export completed for "+ service + " : " + result + " node"+ (result > 1 ? "s" : "") + " exported");
+                            //process.exit(0);
 				        });
 			        });
 		        });

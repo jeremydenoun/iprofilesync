@@ -23,6 +23,8 @@ module.exports = function (options) {
         name = keys[0];
         n = name.split(".")[0];
         n_group = n.split(global.config.indexer_global_name_separator || "-");
+        if (typeof host[name].tags != "undefined")
+            n_group = n_group.concat(host[name].tags);
 
         for (z = 0, l_tag = n_group.length; z < l_tag; ++z) {
             if (_.indexOf(tags, n_group[z]) == -1 &&
@@ -36,6 +38,8 @@ module.exports = function (options) {
 
     this.command = function(elt, host) {
         cmd = global.config.indexer_global_command + " ";
+        if (host[name].ssh_options)
+            cmd += host[name].ssh_options + " ";
         if (host.checker.ssh_options)
             cmd += host.checker.ssh_options + " ";
         if (host.checker.port != 22)

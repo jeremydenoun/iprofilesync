@@ -68,13 +68,15 @@ cleaner = function(data) {
 
 var export_data = function(format, data, target, display_changeset) {
     if (typeof display_changeset != "undefined" && display_changeset) {
-        if (format == "json")
-            actual = import_json(expandHomedir(target));
-        if (format == "plist")
-            actual = Plist.readFileSync(expandHomedir(target));
-        if (format == "bplist")
-            actual = Plist.readBinaryFileSync(expandHomedir(target));
-        changeset_object(actual, data);
+        if (Fs.existsSync(expandHomedir(target))) {
+            if (format == "json")
+                actual = import_json(expandHomedir(target));
+            if (format == "plist")
+                actual = Plist.readFileSync(expandHomedir(target));
+            if (format == "bplist")
+                actual = Plist.readBinaryFileSync(expandHomedir(target));
+            changeset_object(actual, data);
+        }
     }
 
     if (format == "json")

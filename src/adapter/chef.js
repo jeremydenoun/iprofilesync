@@ -27,11 +27,11 @@ module.exports = function (options) {
             });
 	    } catch (err) {
             global.log(err);
-            global.log("Unable to access to chef server '"+options.adapter_chef_url+"' ("+options.adapter_chef_username+") I fallback on : " + options.adapter_chef_fallback_file);
+            global.log("Unable to access to chef server '"+options.adapter_chef_url+"' ("+options.adapter_chef_username+") I fallback on : " + options.adapter_fallback_file);
 
             /* restore from fallback */
-            if (options.adapter_chef_fallback_file && Fs.existsSync(options.adapter_chef_fallback_file))
-                return tools.import_json(options.adapter_chef_fallback_file);
+            if (options.adapter_fallback_file && Fs.existsSync(options.adapter_fallback_file))
+                return callback(tools.import_json(options.adapter_fallback_file));
 	        return false;
 	    }
     }

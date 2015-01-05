@@ -10,6 +10,8 @@
 
     _    = require('underscore');
 
+    expandHomedir = require('expand-home-dir');
+
     slice = function(hash, values) {
         var key, r, value;
         r = {};
@@ -34,12 +36,13 @@
 
             var errored, f, k, key, port, ports, ran, succeeded, user, users, _i, _j, _len, _len1, _ref, _users, _results;
             if (data.hasOwnProperty('checker_private_key') && data.checker_private_key) {
-                if (!Fs.existsSync(data.checker_private_key)) {
+                if (!Fs.existsSync(expandHomedir(data.checker_private_key))) {
                     process.nextTick(function() {
                         return callback(new Error("Unable to find private key : " + data.checker_private_key));
                     });
                     return;
-                }
+                } else
+                    data.privateKey = data.checker_private_key;
             } else {
                 key = null;
                 _ref = ['id_rsa', 'id_dsa'];
@@ -58,7 +61,8 @@
                 }
                 data.privateKey = key;
             }
-            data.privateKey = Fs.readFileSync(data.privateKey).toString();
+
+            data.privateKey = Fs.readFileSync(expandHomedir(data.privateKey)).toString();
 
             users = data.checker_users instanceof Array ? data.checker_users : [(_users = data.checker_users) != null ? _users : process.env.USER];
             ports = data.checker_ports instanceof Array ? data.checker_ports : [data.checker_ports];
@@ -149,17 +153,20 @@
             }
             else
                 data = hash.rows;
-
             done = {};
             _results = [];
             for (key in data) {
                 _results.push((function(self, key) {
                     var host = data[key];
+                    var opts = {};
                     var hostname = Object.keys(data[key])[0].split(".")[0];
-                    if (typeof data[key] == "object" && typeof data[key][Object.keys(data[key])[0]].ipaddress != "undefined")
-                        host=data[key][Object.keys(data[key])[0]].ipaddress;
 
-                    return self.check(host, {}, function(err, obj) {
+                    if (typeof data[key] == "object" && typeof data[key][Object.keys(data[key])[0]].ipaddress != "undefined") {
+                        host=data[key][Object.keys(data[key])[0]].ipaddress;
+                        opts=data[key][Object.keys(data[key])[0]];
+                    }
+
+                    return self.check(host, opts, function(err, obj) {
                         if (!obj)
                             obj = {};
 
