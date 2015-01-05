@@ -103,7 +103,7 @@ You should write your own configuration into config/profile/ directory and use i
 
 ```sh
 {
-	"adapter" : "chef", /* support : default / file / chef / chef_knife */
+	"adapter" : "chef", /* support : default / file / chef / chef_knife / aws */
 
     /* custom config for file adapter */
 	"adapter_file_path": "{path}", /* JSON data path must respect syntax like [ { "localhost": {"ipaddress" : "127.0.0.1"} } ] */
@@ -117,15 +117,24 @@ You should write your own configuration into config/profile/ directory and use i
 	"adapter_chef_home": "{your knife repo}",
 	"adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
 
-     /* custom config for chef* adapter */
-    "adapter_chef_fallback_update": true, /* if true update fallback_file file if chef return one node or more */
-    "adapter_chef_fallback_file": "{your knife repo}/nodes.json", /* use this file as source if knife cmd return 0 node */
+    /* custom config for aws adapter */
+	"adapter_aws_access_key_id": "{your access key}", /* your aws access key id */
+	"adapter_aws_secret_access_key": "{your secret access key}", /* your aws secret access key be careful your config file must be readable only by you */
+    "adapter_aws_region" : ['us-east-1'], /* array of your region */
+    "adapter_aws_key_repository" : "{private key pair directory}", /* directory with your pem key named like amazon key pair name .pem */
+    "adapter_aws_key_path_force" : "{key path}", /* use it if you want force only one key */
+    "adapter_aws_key_internal_force" : false, /* use your private key */
+
+
+     /* custom config for all adapter */
+    "adapter_fallback_file": "{path}/nodes.json", /* use this file as source if an error occured for don't remove all node */
 
 	"adapter_suffix" : "", /* TODO we check strict hostname first and if this fail we try to fallback on hostname+adapter_suffix (think to "dot" first) */
 	"adapter_force_suffix": false, /* TODO if true check with suffix will be more important than check without suffix */
-	"adapter_ignore" : [ ], /* host (node) to ignore */
-	"adapter_alias" : [ { "localhost": {"ipaddress" : "127.0.0.1"} } ], /* define a list of alias overwrite output */
-	"adapter_manual" :  [ { "localhost": {"ipaddress" : "127.0.1.1"} } ], /* define a list of additional host */
+
+	"adapter_ignore" : [ ], /* host (node) to ignore on your adapter list*/
+	"adapter_manual" :  [ { "localhost": {"ipaddress" : "127.0.1.1"} } ], /* define a list of additional host to add on your adapter list */
+	"adapter_alias" : [ { "localhost": {"ipaddress" : "127.0.0.1"} } ], /* define a list of alias for overwrite your adapter list */
 
 
 	"checker" : "ssh", /* support : default / ssh */
@@ -169,10 +178,11 @@ You should write your own configuration into config/profile/ directory and use i
 
 ### Known Issues
 
-    * Checker SSH - If you specify N ssh users (checker_users) for a profile and all users have ssh access
-    it's the first success callback win but if another success callback with prior username position in checker_users config
-    they will be override but for determine if we have finish we wait one callback for each node so we can determine finish
-    before receive success callback so for the moment we recommend to use checker_specific_pref for determine right user,
+    * Checker SSH - If you specify N ssh users (checker_users) for a profile and all users have
+    ssh access it's the first success callback win but if another success callback with prior
+    username position in checker_users config they will be override but for determine if we have
+    finish we wait one callback for each node so we can determine finish before receive success
+    callback so for the moment we recommend to use checker_specific_pref for determine right user,
     in next release we will wait all ssh checking callback for be sure to have consistent system
 
 
