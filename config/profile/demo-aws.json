@@ -22,7 +22,6 @@
 	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
 	"checker_password" : false, /* default password */
 	"checker_ports" : [22], /* ssh ports list */
-	"checker_additional_options" : "-A", /* options add to connection string for export */
     "checker_force_success" : false, /* specific bool for force checker to always validate entry */
 	"checker_specific_pref" : [ ], /* specif user for specific node */
 

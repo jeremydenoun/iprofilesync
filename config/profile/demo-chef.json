@@ -6,12 +6,12 @@
     "adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
-    /* OR If you prefer use knife system you can custom config chef_knife adapter */
+    /* OR If you prefer use knife system you can custom config chef_knife adapter (you can delete line unused 2 next or 3 previous) */
 	"adapter_chef_home": "{your knife repo}",
 	"adapter_chef_custom_cmd": false, /* by default we use 'knife search node "name:*" -a ipaddress --format json' you can replace it by your cmd (you must be compliant with knife json output) */
 
      /* custom config for all adapter */
-    "adapter_fallback_file": "{path}/nodes.json", /* use this file as source if an error occured for don't remove all node */
+    "adapter_fallback_file": "{backup path}/nodes.json", /* use this file as source if an error occured for don't remove all node */
 
 	"adapter_ignore" : [ ], /* host (node) to ignore on your adapter list*/
 	"adapter_manual" :  [ ], /* define a list of additional host to add on your adapter list */
@@ -19,13 +19,14 @@
 
 
 	"checker" : "ssh", /* support : default / ssh */
-	"checker_users" : ["root","customer"], /* user name preference list */
+	"checker_users" : ["root"], /* user name preference list */
 	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
 	"checker_password" : false, /* default password */
-	"checker_ports" : [22, 2222], /* ssh ports list */
-	"checker_additional_options" : "-A", /* options add to connection string for export */
+	"checker_ports" : [22], /* ssh ports list */
     "checker_force_success" : false, /* specific bool for force checker to always validate entry */
 	"checker_specific_pref" : [ ], /* specif user for specific node */
+
+    /* if you have private range server you can use this parameter for define a way to access it else you can delete this 4 parameter*/
     "checker_private_user" : "root", /* user for private area */
     "checker_private_port" : "22", /* port for private area */
     "checker_private_prefix": "10.", /* prefix ip for private area */
@@ -33,7 +34,7 @@
 
 
 	"indexer" : "iterm2", /* support : default / iterm2 */
-	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
+	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list read code for details */
 	"indexer_static_template" : {
         "Default Bookmark" : "No",
 		"Custom Command" : "Yes",
