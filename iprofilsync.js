@@ -124,6 +124,8 @@ program
 	    if (!config.exporter)
 		    config.exporter = "default";
 
+        config.service = service;
+
 	    try {
             var Adapter = require('./src/adapter/'+config.adapter+'.js');
 		    var Checker = require('./src/checker/'+ config.checker +'.js');

@@ -7,6 +7,8 @@ var crypto    = require('crypto');
 module.exports = function (options) {
 
     this.name = function(elt, host) {
+        var keys, name, n;
+
         keys = _.keys(host);
         keys = _.difference(keys, ["checker"]);
         name = keys[0];
@@ -17,6 +19,8 @@ module.exports = function (options) {
     }
 
     this.tags = function(elt, host) {
+        var tags, keys, name, n, n_group, z, l_tag;
+
         tags = _.clone(global.config.indexer_global_generic_tag) || [];
         keys = _.keys(host);
         keys = _.difference(keys, ["checker"]);
@@ -37,6 +41,12 @@ module.exports = function (options) {
     }
 
     this.command = function(elt, host) {
+        var cmd, keys, name;
+
+        keys = _.keys(host);
+        keys = _.difference(keys, ["checker"]);
+        name = keys[0];
+
         cmd = global.config.indexer_global_command + " ";
         if (host[name].ssh_options)
             cmd += host[name].ssh_options + " ";
@@ -52,6 +62,7 @@ module.exports = function (options) {
 
 
     this.guid = function(elt, host) {
+        var keys, name;
         var sum = crypto.createHash('sha1');
         var hex_high_10 = { // set the highest bit and clear the next highest
             '0': '8',
@@ -74,9 +85,9 @@ module.exports = function (options) {
 
         keys = _.keys(host);
         keys = _.difference(keys, ["checker"]);
-        name = keys[0];
+        name = global.config.service + "-" + keys[0]; // add service before name for authorize duplicate name & different GUID
 
-        sum.update(keys[0]);
+        sum.update(name);
         var uuid = sum.digest('hex');
         uuid = uuid.substr(0, 8) + '-' + // time_low
         uuid.substr(8, 4) + '-' + // time_mid
@@ -90,9 +101,26 @@ module.exports = function (options) {
         return elt;
     }
 
+    this.overwrite_param = function (elt, host) {
+        var j, len2, keys, name;
+
+        keys = _.keys(host);
+        keys = _.difference(keys, ["checker"]);
+        name = keys[0];
+
+        for (j = 0, len2 = global.config.indexer_specific_pref.length; j < len2; ++j) {
+            keys = _.keys(global.config.indexer_specific_pref[j]);
+            if (name == keys[0]) {
+                elt = _.extend(elt, global.config.indexer_specific_pref[j][name]);
+            }
+        }
+        return elt;
+    }
+
     this.index = function (data, callback) {
         config = global.config;
         var _result = [];
+        var i, len, keys;
 
         for (i = 0, len = data.length; i < len; ++i) {
             var elt = config.indexer_static_template;
@@ -106,20 +134,10 @@ module.exports = function (options) {
 
                 /* overwrite param for specific host */
                 if (global.config.indexer_specific_pref) {
-                    keys = _.keys(host);
-                    keys = _.difference(keys, ["checker"]);
-                    name = keys[0];
-
-                    for (j = 0, len2 = global.config.indexer_specific_pref.length; j < len2; ++j) {
-                        keys = _.keys(global.config.indexer_specific_pref[j]);
-                        if (name == keys[0]) {
-                            elt = _.extend(elt, global.config.indexer_specific_pref[j][name]);
-                        }
-                    }
+                    elt = _.clone(this["overwrite_param"](elt, host));
                 }
 
                 _result.push(elt);
-
             }
         }
 	    return callback({"Profiles":_result});
