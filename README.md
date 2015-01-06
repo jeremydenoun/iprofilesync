@@ -105,6 +105,18 @@ node iprofilsync.js config default
   indexer: 'default',
   exporter: 'default' }
 
+node iprofilsync.js sync --help
+  Usage: sync [options] <service>
+
+  Options:
+
+    -h, --help   output usage information
+    -d, --debug  Debug display
+
+  Examples:
+
+    $ sync default
+
 node iprofilsync sync chef
 => "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist"
 export completed for chef : 42 nodes exported
