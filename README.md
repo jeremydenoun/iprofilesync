@@ -187,12 +187,23 @@ You should write your own configuration into config/profile/ directory and use i
 
 ### TODO
 
-    * Improve SSH checking for resolve known issue
-    * Adapter Suffix management
-    * puppet and vmware adapter
-    * log level and notification
-    * Mocha Testing on all step
-
+    * Adapter :
+      * puppet and vmware adapter
+      * Adapter Suffix management
+    * Checker :
+      * Improve SSH checking for resolve known issue
+      * verify real ssh connexion (wait a shell by example or other)
+      * add a ping only checker
+    * Indexer :
+      * add an indexer for shell host support (bash/zsh)
+    * Exporter :
+      * bash/zsh exporter after indexer upgrade
+      * improve changeset detector
+      * support multiple exporter
+    * General :
+      * log level and notification
+      * Mocha Testing on all step
+      * progress bar display
 
 ### Link
 https://iterm2.com/dynamic-profiles.html - iTerm2 Dynamic Profil Feature
