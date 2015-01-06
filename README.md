@@ -124,10 +124,9 @@ export completed for chef : 42 nodes exported
 
 ### Configuration
 
-You should write your own configuration into config/profile/ directory and use it like a **service** into command line.
+You should write your own configuration into **config/profile/** directory and use it like a **service** into command line.
 
-Some common demo configuration are available on config/profile/demo*.json, you can find below a **complete** configuration but only [MANDATORY] field
-are needed, the [RECOMMENDED] field are recommended (depending your usage) and the others are optionnal.
+Some common demo configuration are available on **config/profile/demo\*.json**, you can find below a **complete** configuration but only [MANDATORY] field are needed, the [RECOMMENDED] field are recommended (depending your usage) and the others are optionnal.
 
 ```sh
 {
