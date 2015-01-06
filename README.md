@@ -203,6 +203,18 @@ Some common demo configuration are available on **config/profile/demo\*.json**, 
 ```
 *We use JSON import workaround permit us to add comment into JSON configuration file*
 
+### Quick Start
+
+chef => iterm2 usage
+
+```sh
+cd config/profile
+cp demo-chef.json chef.json
+#edit chef.json and fill {...} field (access, path, ..)
+cd ../..
+node iprofilsync.js sync -d chef # for debug version
+node iprofilsync.js sync chef # for short version
+```
 
 ### Known Issues
 
