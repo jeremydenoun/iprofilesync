@@ -1,7 +1,7 @@
-var Path = require('path-extra');
+//var Path = require('path-extra');
 var Fs   = require('fs');
 var _    = require('underscore');
-var shell = require("shelljs");
+//var shell = require("shelljs");
 var expandHomedir = require('expand-home-dir');
 var diff = require('changeset');
 var Plist = require('simple-plist');
@@ -13,16 +13,18 @@ var exit = function(ret) {
 
 var import_json = function(path) {
     var fs = require("fs");
+    var json = null;
+
     JSON.minify = JSON.minify || require("node-json-minify");
 
     try {
-	var json = (JSON.parse(JSON.minify(fs.readFileSync(path, "utf8"))));
+	    var json = (JSON.parse(JSON.minify(fs.readFileSync(path, "utf8"))));
     } catch (err) {
-	if ( err instanceof SyntaxError ) {
-	    global.error("unable to parse json " + path + ": ");
-	    global.error(err);
-	}
-	return false;
+	    if (err instanceof SyntaxError) {
+	        global.error("unable to parse json " + path + ": ");
+	        global.error(err);
+	    }
+	    return null;
     }
     return json;
 };
@@ -69,16 +71,14 @@ cleaner = function(data) {
 var export_data = function(format, data, target, display_changeset) {
     var actual;
 
-    if (typeof display_changeset != "undefined" && display_changeset) {
-        if (Fs.existsSync(expandHomedir(target))) {
-            if (format == "json")
-                actual = import_json(expandHomedir(target));
-            if (format == "plist")
-                actual = Plist.readFileSync(expandHomedir(target));
-            if (format == "bplist")
-                actual = Plist.readBinaryFileSync(expandHomedir(target));
-            changeset_object(actual, data);
-        }
+    if (typeof display_changeset != "undefined" && display_changeset && Fs.existsSync(expandHomedir(target))) {
+        if (format == "json")
+            actual = import_json(expandHomedir(target));
+        if (format == "plist")
+            actual = Plist.readFileSync(expandHomedir(target));
+        if (format == "bplist")
+            actual = Plist.readBinaryFileSync(expandHomedir(target));
+        changeset_object(actual, data);
     }
 
     if (format == "json")
@@ -142,6 +142,8 @@ var override_adapter_list = function(rows, options) {
 
 // Display a changeset of update between source and dest can be improved with colors and format
 var changeset_object = function(source, dest) {
+    var changeset;
+
     global.log("Changeset : ");
     changeset = diff(source, dest);
     if (changeset.length > 0)
