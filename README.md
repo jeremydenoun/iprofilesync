@@ -139,9 +139,9 @@ You should write your own configuration into config/profile/ directory and use i
     "adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
-    /* custom config for chef_knife adapter */
-	"adapter_chef_home": "{your knife repo}",
-	"adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
+    /* If you prefer use knife system you can custom config chef_knife adapter */
+    "adapter_chef_home": "{your knife repo}",
+    "adapter_chef_custom_cmd": false, /* by default we use 'knife search node "name:*" -a ipaddress --format json' you can replace it by your cmd (you must be compliant with knife json output) */
 
     /* custom config for aws adapter */
 	"adapter_aws_access_key_id": "{your access key}", /* your aws access key id */

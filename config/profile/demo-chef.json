@@ -1,14 +1,14 @@
 {
-	"adapter" : "chef", /* support : default / file / chef / chef_knife / aws */
+	"adapter" : "chef", /* or chef_knife support : default / file / chef / chef_knife / aws */
 
     /* custom config for chef adapter */
     "adapter_chef_username": "{username}", /* chef username */
     "adapter_chef_key_user_path": "{private key path}", /* private key path (.pem) */
 	"adapter_chef_url": "{url}", /* chef server url  */
 
-    /* OR custom config for chef_knife adapter */
+    /* OR If you prefer use knife system you can custom config chef_knife adapter */
 	"adapter_chef_home": "{your knife repo}",
-	"adapter_chef_custom_cmd": false, /* replace 'knife search node "name:*" -a ipaddress --format json' by your cmd (you must be compliant with knife json output) */
+	"adapter_chef_custom_cmd": false, /* by default we use 'knife search node "name:*" -a ipaddress --format json' you can replace it by your cmd (you must be compliant with knife json output) */
 
      /* custom config for all adapter */
     "adapter_fallback_file": "{path}/nodes.json", /* use this file as source if an error occured for don't remove all node */
