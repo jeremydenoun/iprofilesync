@@ -1,5 +1,5 @@
-//var Path = require('path-extra');
-var Fs   = require('fs');
+var Path = require('path-extra');
+var Fs   = require('fs-extended');
 var _    = require('underscore');
 //var shell = require("shelljs");
 var expandHomedir = require('expand-home-dir');
@@ -84,6 +84,11 @@ var export_data = function(format, data, target, display_changeset) {
             break;
         }
         changeset_object(actual, data);
+    }
+    path = Path.dirname(expandHomedir(target));
+    if (!Fs.existsSync(path)) {
+        global.log("Warning: your output path (" + path + ") doesn't exists, I will create it for you");
+        Fs.createDirSync(path, 0755);
     }
 
     switch (format){
