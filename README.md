@@ -141,7 +141,7 @@ You should write your own configuration into config/profile/ directory and use i
 	"checker_users" : ["root","customer"], /* user name preference list */
 	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
 	"checker_password" : false, /* default password */
-	"checker_ports" : [22, 42042], /* ssh ports list */
+	"checker_ports" : [22, 2222], /* ssh ports list */
 	"checker_additional_options" : "-A", /* options add to connection string for export */
     "checker_force_success" : false, /* specific bool for force checker to always validate entry */
 	"checker_specific_pref" : [ {"localhost": {"user": "root"} } ], /* specif user for specific node */
@@ -184,6 +184,14 @@ You should write your own configuration into config/profile/ directory and use i
     finish we wait one callback for each node so we can determine finish before receive success
     callback so for the moment we recommend to use checker_specific_pref for determine right user,
     in next release we will wait all ssh checking callback for be sure to have consistent system
+
+### TODO
+
+    * Improve SSH checking for resolve known issue
+    * Adapter Suffix management
+    * puppet and vmware adapter
+    * log level and notification
+    * Mocha Testing on all step
 
 
 ### Link

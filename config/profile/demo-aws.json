@@ -1,0 +1,46 @@
+{
+	"adapter" : "aws", /* support : default / file / chef / chef_knife / aws */
+
+    /* custom config for aws adapter */
+	"adapter_aws_access_key_id": "{your access key}", /* your aws access key id */
+	"adapter_aws_secret_access_key": "{your secret access key}", /* your aws secret access key be careful your config file must be readable only by you */
+    "adapter_aws_region" : ['us-east-1'], /* array of your region */
+    "adapter_aws_key_repository" : "{private key pair directory}", /* directory with your pem key named like amazon key pair name .pem */
+    "adapter_aws_key_path_force" : "{key path}", /* use it if you want force only one key */
+    "adapter_aws_key_internal_force" : false, /* use your private key */
+
+
+     /* custom config for all adapter */
+    "adapter_fallback_file": "{path}/nodes.json", /* use this file as source if an error occured for don't remove all node */
+	"adapter_ignore" : [ ], /* host (node) to ignore on your adapter list*/
+	"adapter_manual" :  [ ], /* define a list of additional host to add on your adapter list */
+	"adapter_alias" : [ ], /* define a list of alias for overwrite your adapter list */
+
+
+	"checker" : "ssh", /* support : default / ssh */
+	"checker_users" : ["ec2-user"], /* user name preference list */
+	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
+	"checker_password" : false, /* default password */
+	"checker_ports" : [22], /* ssh ports list */
+	"checker_additional_options" : "-A", /* options add to connection string for export */
+    "checker_force_success" : false, /* specific bool for force checker to always validate entry */
+	"checker_specific_pref" : [ ], /* specif user for specific node */
+
+	"indexer" : "iterm2", /* support : default / iterm2 */
+	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
+	"indexer_static_template" : {
+        "Default Bookmark" : "No",
+		"Custom Command" : "Yes",
+		"ASCII Anti Aliased" : true
+	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key */
+    "indexer_global_name_separator" : "-", /* separator for name field by example web-01 => "-" | default : "-" */
+    "indexer_global_generic_tag" : [ "aws" ], /* global tag for each node */
+    "indexer_global_ignore_tag" : [ ], /* remove this tag list */
+    "indexer_global_command" : "ssh -A", /* global command for each node */
+	"indexer_specific_pref" : [ ], /* specify template preference for node name */
+
+	"exporter" : "default", /* default */
+	"exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/aws.plist", /* node name to exclude */
+    "exporter_print_diff" : true, /* print diff before write */
+	"exporter_format" : "plist", /* json / plist / bplist */
+}

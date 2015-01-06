@@ -3,5 +3,7 @@
 config/global.js
 config/profile/*
 !config/profile/default.json
-!config/profile/demo.json
+!config/profile/demo*.json
+
+test.js
 
