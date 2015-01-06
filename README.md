@@ -12,6 +12,10 @@ iProfilSync dynamic profil exporter
     * for chef usage :
           * correct knife configuration (tested with Chef: 11.12.8)
           * or user name / private key and server url
+    * for aws usage (EC2 instances) :
+          * access_key_id / secret_access_key
+          * region list where you have EC2 instances
+          * directory with your aws pem key or single key pem or be sure to have access with your private key
     * for puppet usage : (*TODO*)
           * credentials
     * for vmware usage : (*TODO*)
@@ -26,6 +30,16 @@ Actually 3 npm modules are customized for assure correct behavior :
     * commander (2.3.0-custom) => I would like a "interactive cli" so I add it
     * simple-plist (0.0.3-custom) => This module use deprecated plist function so I fix it
     (we can merge with master if they fix it)
+
+### Installation
+
+```sh
+npm install iprofilsync
+
+or
+
+git clone https://github.com/jeremydenoun/iprofilsync.git
+```
 
 ### Usage
 
