@@ -18,7 +18,7 @@ var import_json = function(path) {
     JSON.minify = JSON.minify || require("node-json-minify");
 
     try {
-	    var json = (JSON.parse(JSON.minify(fs.readFileSync(path, "utf8"))));
+	    json = (JSON.parse(JSON.minify(fs.readFileSync(path, "utf8"))));
     } catch (err) {
 	    if (err instanceof SyntaxError) {
 	        global.error("unable to parse json " + path + ": ");
@@ -72,21 +72,30 @@ var export_data = function(format, data, target, display_changeset) {
     var actual;
 
     if (typeof display_changeset != "undefined" && display_changeset && Fs.existsSync(expandHomedir(target))) {
-        if (format == "json")
+        switch (format) {
+        case "json":
             actual = import_json(expandHomedir(target));
-        if (format == "plist")
+            break;
+        case "plist":
             actual = Plist.readFileSync(expandHomedir(target));
-        if (format == "bplist")
+            break;
+        case "bplist":
             actual = Plist.readBinaryFileSync(expandHomedir(target));
+            break;
+        }
         changeset_object(actual, data);
     }
 
-    if (format == "json")
+    switch (format){
+    case "json":
         return Fs.writeFileSync(expandHomedir(target), JSON.stringify(data, null, '  '));
-    if (format == "plist")
+    case "plist":
         return Plist.writeFileSync(expandHomedir(target), cleaner(data));
-    if (format == "bplist")
+    case "bplist":
         return Plist.writeBinaryFileSync(expandHomedir(target), cleaner(data));
+    default:
+        return null;
+    }
 };
 
 
