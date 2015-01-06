@@ -232,6 +232,7 @@ node iprofilsync.js sync chef # for short version
     * Checker :
       * Improve SSH checking for resolve known issue
       * verify real ssh connexion (wait a shell by example or other)
+      * check internal range connectivity (actually we consider success in all case)
       * add a ping only checker
     * Indexer :
       * add an indexer for shell host support (bash/zsh)
