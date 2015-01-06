@@ -125,11 +125,13 @@ export completed for chef : 42 nodes exported
 ### Configuration
 
 You should write your own configuration into config/profile/ directory and use it like a **service** into command line.
-*We use JSON import workaround permit us to add comment into JSON configuration file*
+
+Some common demo configuration are available on config/profile/demo*.json, you can find below a **complete** configuration but only [MANDATORY] field
+are needed, the [RECOMMENDED] field are recommended (depending your usage) and the others are optionnal.
 
 ```sh
 {
-	"adapter" : "chef", /* support : default / file / chef / chef_knife / aws */
+	"adapter" : "chef", /* support : default / file / chef / chef_knife / aws [MANDATORY]*/
 
     /* custom config for file adapter */
 	"adapter_file_path": "{path}", /* JSON data path must respect syntax like [ { "localhost": {"ipaddress" : "127.0.0.1"} } ] */
@@ -163,11 +165,11 @@ You should write your own configuration into config/profile/ directory and use i
 	"adapter_alias" : [ { "localhost": {"ipaddress" : "127.0.0.1"} } ], /* define a list of alias for overwrite your adapter list */
 
 
-	"checker" : "ssh", /* support : default / ssh */
-	"checker_users" : ["root","customer"], /* user name preference list */
+	"checker" : "ssh", /* support : default / ssh [MANDATORY] */
+	"checker_users" : ["root","customer"], /* user name preference list [RECOMMENDED]*/
 	"checker_private_key" : false, /* private key (default: ~/.id_[rd]sa) */
 	"checker_password" : false, /* default password */
-	"checker_ports" : [22, 2222], /* ssh ports list */
+	"checker_ports" : [22, 2222], /* ssh ports list [RECOMMENDED] */
 	"checker_additional_options" : "-A", /* options add to connection string for export */
     "checker_force_success" : false, /* specific bool for force checker to always validate entry */
 	"checker_specific_pref" : [ {"localhost": {"user": "root"} } ], /* specif user for specific node */
@@ -177,30 +179,31 @@ You should write your own configuration into config/profile/ directory and use i
     "checker_private_ssh_options": "-o ProxyCommand=\"ssh -W %h:%p root@{proxy-server-for-internal}\"", /* proxy ssh command for internal */
 
 
-	"indexer" : "iterm2", /* support : default / iterm2 */
-	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list */
+	"indexer" : "iterm2", /* support : default / iterm2 [MANDATORY]*/
+	"indexer_rules" : ["name", "guid", "command", "tags"], /* custom function for enhanced nodes list [RECOMMENDED] */
 	"indexer_static_template" : {
         "Default Bookmark" : "No",
 		"Custom Command" : "Yes",
 		"ASCII Anti Aliased" : true
-	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key */
+	     }, /* define standard config for node, you can overide this by node name with indexer_specific_pref you can check src/indexer/iterm2_model for available key [RECOMMENDED] */
     "indexer_global_name_separator" : "-", /* separator for name field by example web-01 => "-" | default : "-" */
-    "indexer_global_generic_tag" : [ "{global tag}" ], /* global tag for each node */
+    "indexer_global_generic_tag" : [ "{global tag}" ], /* global tag for each node [RECOMMENDED] */
     "indexer_global_ignore_tag" : [ "{ignore tag}" ], /* remove this tag list */
-    "indexer_global_command" : "ssh -A", /* global command for each node */
+    "indexer_global_command" : "ssh -A", /* global command for each node [RECOMMENDED] */
 	"indexer_specific_pref" : [ {"localhost": {"Custom Command" : "Yes"} } ], /* specify template preference for node name */
 
-	"exporter" : "default", /* default */
-	"exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist", /* node name to exclude */
+	"exporter" : "default", /* default [MANDATORY] */
+	"exporter_path" : "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist", /* node name to exclude [MANDATORY] */
     "exporter_print_diff" : true, /* print diff before write */
-	"exporter_format" : "plist", /* json / plist / bplist */
+	"exporter_format" : "plist", /* json / plist / bplist [MANDATORY] */
 
 	"log_level" : "error", /* TODO none / debug / warning / error */
 	"notify_sync_error" : "none", /* TODO value : none / mail / url_callback / script */
 	"notify_sync_data" : "" /* TODO mail / url / path script (log in parameter) */
 }
-
 ```
+*We use JSON import workaround permit us to add comment into JSON configuration file*
+
 
 ### Known Issues
 
