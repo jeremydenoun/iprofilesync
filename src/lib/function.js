@@ -9,7 +9,7 @@ var Plist = require('simple-plist');
 var exit = function(ret) {
     global.log("Good Bye");
     process.exit(ret);
-}
+};
 
 var import_json = function(path) {
     var fs = require("fs");
@@ -25,7 +25,7 @@ var import_json = function(path) {
 	return false;
     }
     return json;
-}
+};
 
 var cleaner, cleaner_array, cleaner_hash;
 
@@ -67,6 +67,8 @@ cleaner = function(data) {
 };
 
 var export_data = function(format, data, target, display_changeset) {
+    var actual;
+
     if (typeof display_changeset != "undefined" && display_changeset) {
         if (Fs.existsSync(expandHomedir(target))) {
             if (format == "json")
@@ -85,7 +87,7 @@ var export_data = function(format, data, target, display_changeset) {
         return Plist.writeFileSync(expandHomedir(target), cleaner(data));
     if (format == "bplist")
         return Plist.writeBinaryFileSync(expandHomedir(target), cleaner(data));
-}
+};
 
 
 // internal compare function for sorting
@@ -98,6 +100,7 @@ function compare_array_object(a, b) {
 }
 
 var override_adapter_list = function(rows, options) {
+    var i, len, keys, idx;
     // manual list union
     if (options.adapter_manual) {
         rows = _.union(rows, options.adapter_manual);
@@ -106,7 +109,7 @@ var override_adapter_list = function(rows, options) {
     // overwrite list
     if (options.adapter_alias) {
         for (i = 0, len = options.adapter_alias.length; i < len; ++i) {
-            var idx = -1;
+            idx = -1;
             keys = _.keys(options.adapter_alias[i]);
             _.find(rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys[0]; });
             if (idx != -1) {
@@ -118,7 +121,7 @@ var override_adapter_list = function(rows, options) {
     // remove ignore list
     if (options.adapter_ignore) {
         for (i = 0, len = options.adapter_ignore.length; i < len; ++i) {
-            var idx = -1;
+            idx = -1;
             keys = options.adapter_ignore[i];
             _.find(rows, function(obj, key){ idx = key; return _.keys(obj)[0] == keys; });
             if (idx != -1) {
@@ -135,7 +138,7 @@ var override_adapter_list = function(rows, options) {
         export_data("json", rows, options.adapter_chef_fallback_file);
 
     return rows;
-}
+};
 
 // Display a changeset of update between source and dest can be improved with colors and format
 var changeset_object = function(source, dest) {
@@ -145,7 +148,7 @@ var changeset_object = function(source, dest) {
         global.log(changeset);
     else
         global.log("No change");
-}
+};
 
 module.exports.exit = exit;
 module.exports.import_json = import_json;
