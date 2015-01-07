@@ -1,6 +1,6 @@
 {
   "name": "iprofilesync",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
   "keywords": [
     "profile",
@@ -35,7 +35,7 @@
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"
   },
-  "main": "iprofilsync",
+  "main": "iprofilesync",
   "author": {
     "name": "Jeremy Denoun",
     "email": "denoun_j@epita.fr"
