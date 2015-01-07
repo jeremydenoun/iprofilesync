@@ -1,7 +1,17 @@
 {
-  "name": "iprofilsync",
-  "version": "1.0.0",
+  "name": "iprofilesync",
+  "version": "1.0.2",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
+  "keywords": [
+    "profile",
+    "profiles",
+    "sync",
+    "iterm2",
+    "aws",
+    "chef",
+    "puppet",
+    "vmware"
+  ],
   "dependencies": {
     "changeset": "^0.1.0",
     "expand-home-dir": "0.0.2",
@@ -16,12 +26,19 @@
     "ssh2": "^0.3.6",
     "underscore": "^1.7.0"
   },
-  "url" : "https://github.com/jeremydenoun/iprofilsync/issues",
+  "url" : "https://github.com/jeremydenoun/iprofilesync",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeremydenoun/iprofilesync.git"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"
   },
   "main": "iprofilsync",
-  "author": "Jeremy Denoun",
+  "author": {
+    "name": "Jeremy Denoun",
+    "email": "denoun_j@epita.fr"
+  },
   "license": "MIT"
 }

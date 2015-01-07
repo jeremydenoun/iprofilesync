@@ -1,8 +1,8 @@
-iProfilSync dynamic profil exporter
+iprofilesync dynamic profil exporter
 ===
-[![Code Climate](https://codeclimate.com/github/jeremydenoun/iprofilsync/badges/gpa.svg)](https://codeclimate.com/github/jeremydenoun/iprofilsync)
-[![Test Coverage](https://codeclimate.com/github/jeremydenoun/iprofilsync/badges/coverage.svg)](https://codeclimate.com/github/jeremydenoun/iprofilsync)
-[![NPM dependencies](https://david-dm.org/jeremydenoun/iprofilsync.png)](https://david-dm.org/jeremydenoun/iprofilsync)
+[![Code Climate](https://codeclimate.com/github/jeremydenoun/iprofilesync/badges/gpa.svg)](https://codeclimate.com/github/jeremydenoun/iprofilesync)
+[![Test Coverage](https://codeclimate.com/github/jeremydenoun/iprofilesync/badges/coverage.svg)](https://codeclimate.com/github/jeremydenoun/iprofilesync)
+[![NPM dependencies](https://david-dm.org/jeremydenoun/iprofilesync.png)](https://david-dm.org/jeremydenoun/iprofilesync)
 
 ### Prerequisites :
 
@@ -34,16 +34,16 @@ Actually 3 npm modules are customized for assure correct behavior :
 ### Installation
 
 ```sh
-npm install iprofilsync
+npm install iprofilesync
 
 or
 
-git clone https://github.com/jeremydenoun/iprofilsync.git
+git clone https://github.com/jeremydenoun/iprofilesync.git
 ```
 
 ### Usage
 
-iProfilSync is a command line tool build for sync a data repository with another tools.
+iprofilesync is a command line tool build for sync a data repository with another tools.
 
 We have 4 process steps :
 
@@ -61,13 +61,13 @@ With a simple configuration you can execute task like :
 
 A cli is available for all command :
 ```sh
-node iprofilsync.js
+node iprofilesync.js
 #>
 ```
 
 You can get available command with help command :
 ```sh
-node iprofilsync.js
+node iprofilesync.js
 #> help
 
   Usage:  [options] [command]
@@ -99,13 +99,13 @@ node iprofilsync.js
 You can launch command with cli or directly with command line :
 
 ```sh
-node iprofilsync.js config default
+node iprofilesync.js config default
 { adapter: 'default',
   checker: 'default',
   indexer: 'default',
   exporter: 'default' }
 
-node iprofilsync.js sync --help
+node iprofilesync.js sync --help
   Usage: sync [options] <service>
 
   Options:
@@ -117,7 +117,7 @@ node iprofilsync.js sync --help
 
     $ sync default
 
-node iprofilsync sync chef
+node iprofilesync sync chef
 => "~/Library/Application Support/iTerm2/DynamicProfiles/chef.plist"
 export completed for chef : 42 nodes exported
 ```
@@ -211,8 +211,8 @@ cd config/profile
 cp demo-chef.json chef.json
 #edit chef.json and fill {...} field (access, path, ..)
 cd ../..
-node iprofilsync.js sync -d chef # for debug version
-node iprofilsync.js sync chef # for short version
+node iprofilesync.js sync -d chef # for debug version
+node iprofilesync.js sync chef # for short version
 ```
 
 ### Known Issues
