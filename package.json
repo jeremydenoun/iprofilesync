@@ -1,6 +1,6 @@
 {
   "name": "iprofilesync",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
   "keywords": [
     "profile",
@@ -15,15 +15,18 @@
   "dependencies": {
     "aws-sdk": "^2.1.4",
     "changeset": "^0.1.0",
+    "chef": "0.3.0-custom",
+    "commander": "2.3.0-custom",
     "expand-home-dir": "0.0.2",
     "fs-extended": "^0.2.0",
     "mocha": "^2.1.0",
     "node-json-minify": "^0.1.3-a",
-    "path-extra": "^0.3.0",
+    "path-extra": "^1.0.3",
     "readline-history": "^1.2.0",
-    "readline-sync": "^0.4.10",
-    "shelljs": "^0.3.0",
-    "should": "^4.4.2",
+    "readline-sync": "^1.2.17",
+    "simple-plist": "0.0.3-custom",
+    "shelljs": "^0.5.0",
+    "should": "^6.0.3",
     "ssh2": "^0.4.8",
     "underscore": "^1.7.0"
   },

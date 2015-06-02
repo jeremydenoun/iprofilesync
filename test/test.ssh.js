@@ -7,7 +7,7 @@ describe('SshCheck', function () {
         this.timeout(6000);
 
         it('Should reject missing host', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 user: 'unused',
                 callback: function (err, data) {
                     should.exist(err);
@@ -19,7 +19,7 @@ describe('SshCheck', function () {
         });
 
         it('should reject missing user', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 host: 'unused',
                 callback: function (err, data) {
                     should.exist(err);
@@ -31,7 +31,7 @@ describe('SshCheck', function () {
         });
 
         it('should report error on non-existant keyfile', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'unused',
                 host: 'unused',
                 privateKey: '/non/existant',
@@ -45,7 +45,7 @@ describe('SshCheck', function () {
         });
 
         it('should report error on invalid keyfile', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'unused',
                 host: 'unused',
                 privateKey: '/dev/null',
@@ -59,7 +59,7 @@ describe('SshCheck', function () {
         });
 
         it('should connect to a valid host', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'new',
                 host: 'sdf.org',
                 callback: done
@@ -67,7 +67,7 @@ describe('SshCheck', function () {
         });
 
         it('should timeout on a blackhole host', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'unused',
                 host: '10.255.255.1',
                 callback: function (err, data) {
@@ -80,7 +80,7 @@ describe('SshCheck', function () {
         });
 
         it('should connect to a password protected host', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'adaedra',
                 host: '127.0.0.1',
                 callback: function (err, data) {
@@ -93,7 +93,7 @@ describe('SshCheck', function () {
         });
 
         it('should reject a password protected host if explicitely asked so', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'adaedra',
                 host: '127.0.0.1',
                 tryKeyboard: false,
@@ -107,7 +107,7 @@ describe('SshCheck', function () {
         });
 
         it('should reject connection with bad password', function (done) {
-            ssh.checkOne({
+            ssh.check({
                 username: 'adaedra',
                 host: '127.0.0.1',
                 tryKeyboard: false,
@@ -129,7 +129,7 @@ describe('SshCheck', function () {
                     + "with the TEST_PASSWORD variable");
             }
 
-            ssh.checkOne({
+            ssh.check({
                 host: '127.0.0.1',
                 username: user,
                 password: password,
@@ -148,7 +148,7 @@ describe('SshCheck', function () {
 
         it('should return correct results for connection tries', function (done) {
             var users = [ 'adaedra', 'root', 'pinkiepie', 'foo', 'nobody' ];
-            ssh.check(
+            ssh.check_nodes(
                 users,
                 {
                     host: '127.0.0.1',
@@ -165,7 +165,7 @@ describe('SshCheck', function () {
         });
 
         it('should report fatal errors', function (done) {
-            ssh.check(
+            ssh.check_nodes(
                 [ 'o', 's', 'e', 'f' ],
                 {
                     host: 'nowhere',
@@ -196,7 +196,7 @@ describe('SshCheck', function () {
             };
             users[user] = password;
 
-            ssh.check(
+            ssh.check_nodes(
                 users,
                 {
                     host: '127.0.0.1',
