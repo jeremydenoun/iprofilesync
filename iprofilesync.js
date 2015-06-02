@@ -65,10 +65,12 @@ program
 
 	    try {
 		    var ListAdapter = require('./src/adapter/'+config.adapter+'.js');
+
 		    var lister = new ListAdapter(config);
-		    global.log(util.inspect(lister.list(), { depth: null }));
+            lister.list(function(nodes_list) {global.log(util.inspect(nodes_list, { depth: null }));});
 	    } catch (err) {
-            global.err("Unable to load src/adapter/"+config.adapter+".js adapter");
+            console.log(err);
+            global.error("Unable to load src/adapter/"+config.adapter+".js adapter");
 		    return;
 	    }
 

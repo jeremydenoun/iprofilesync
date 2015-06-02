@@ -173,8 +173,8 @@
                         // detect if we are on private range
                         //@TODO: we should test if we can connect althrough the proxy set
                         if (global.config.checker_private_prefix){
-                            obj.private_range = (host.indexOf(global.config.checker_private_prefix) > -1);
-                            if (host.indexOf(global.config.checker_private_prefix) > -1) {
+                            obj.private_range = (host.indexOf(global.config.checker_private_prefix) == 0);
+                            if (obj.private_range) {
                                 obj.ssh_options = global.config.checker_private_ssh_options;
                                 obj.user = global.config.checker_private_user;
                                 obj.port = global.config.checker_private_port;

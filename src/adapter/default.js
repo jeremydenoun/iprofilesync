@@ -4,6 +4,6 @@ var _    = require('underscore');
 
 module.exports = function (options) {
     this.list = function (callback) {
-	callback([{"localhost":{"ipaddress": "127.0.0.1"}}]);
+	    callback([{"localhost":{"ipaddress": "127.0.0.1"}}]);
     }
 }

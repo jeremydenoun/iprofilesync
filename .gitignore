@@ -7,3 +7,5 @@ config/profile/*
 
 test.js
 
+.idea
+*.iml

@@ -1,6 +1,6 @@
 {
   "name": "iprofilesync",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
   "keywords": [
     "profile",
@@ -13,6 +13,7 @@
     "vmware"
   ],
   "dependencies": {
+    "aws-sdk": "^2.1.4",
     "changeset": "^0.1.0",
     "expand-home-dir": "0.0.2",
     "fs-extended": "^0.2.0",
@@ -23,7 +24,7 @@
     "readline-sync": "^0.4.10",
     "shelljs": "^0.3.0",
     "should": "^4.4.2",
-    "ssh2": "^0.3.6",
+    "ssh2": "^0.4.8",
     "underscore": "^1.7.0"
   },
   "url" : "https://github.com/jeremydenoun/iprofilesync",
