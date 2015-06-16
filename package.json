@@ -1,6 +1,6 @@
 {
   "name": "iprofilesync",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
   "keywords": [
     "profile",

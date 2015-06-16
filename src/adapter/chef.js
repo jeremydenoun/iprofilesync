@@ -5,7 +5,7 @@ var shell = require("shelljs");
 var util = require('util');
 var tools = require('../lib/function.js');
 var expandHomedir = require('expand-home-dir');
-var chef = require('chef');
+var chef = require('iprofilesync-chef');
 
 module.exports = function (options) {
     this.list = function (callback) {
