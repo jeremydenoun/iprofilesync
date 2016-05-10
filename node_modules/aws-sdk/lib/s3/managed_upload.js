@@ -31,7 +31,7 @@ var byteLength = AWS.util.string.byteLength;
  *     until the total stream size is known.
  *   @note This event will not be emitted in Node.js 0.8.x.
  *   @param progress [map] An object containing the `loaded` and `total` bytes
- *     of the request. Note that `total` may be undefined until the payload
+ *     of the request and the `key` of the S3 object. Note that `total` may be undefined until the payload
  *     size is known.
  *   @context (see AWS.Request~send)
  */
@@ -43,6 +43,9 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    * @option options params [map] a map of parameters to pass to the upload
    *   requests. The "Body" parameter is required to be specified either on
    *   the service or in the params option.
+   * @note ContentMD5 should not be provided when using the managed upload object.
+   *   Instead, setting "computeChecksums" to true will enable automatic ContentMD5 generation
+   *   by the managed upload object.
    * @option options queueSize [Number] (4) the size of the concurrent queue
    *   manager to upload parts in parallel. Set to 1 for synchronous uploading
    *   of parts. Note that the uploader will buffer at most queueSize * partSize
@@ -140,6 +143,8 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    *   @param data [map] The response data from the successful upload:
    *     * `Location` (String) the URL of the uploaded object
    *     * `ETag` (String) the ETag of the uploaded object
+   *     * `Bucket` (String) the bucket to which the object was uploaded
+   *     * `Key` (String) the key to which the object was uploaded
    * @example Sending a managed upload object
    *   var params = {Bucket: 'bucket', Key: 'key', Body: stream};
    *   var upload = new AWS.S3.ManagedUpload({params: params});
@@ -179,7 +184,9 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    * @note By default, calling this function will cleanup a multipart upload
    *   if one was created. To leave the multipart upload around after aborting
    *   a request, configure `leavePartsOnError` to `true` in the {constructor}.
-   * @!macro nobrowser
+   * @note Calling {abort} in the browser environment will not abort any requests
+   *   that are already in flight. If a multipart upload was created, any parts
+   *   not yet uploaded will not be sent, and the multipart upload will be cleaned up.
    * @example Aborting an upload
    *   var params = {
    *     Bucket: 'bucket', Key: 'key',
@@ -367,7 +374,9 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     }
 
     if (self.partBufferLength >= self.partSize) {
-      var pbuf = Buffer.concat(self.partBuffers);
+      // if we have single buffer we avoid copyfull concat
+      var pbuf = self.partBuffers.length === 1 ?
+        self.partBuffers[0] : Buffer.concat(self.partBuffers);
       self.partBuffers = [];
       self.partBufferLength = 0;
 
@@ -383,7 +392,9 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     }
 
     if (self.isDoneChunking && !self.isDoneSending) {
-      pbuf = Buffer.concat(self.partBuffers);
+      // if we have single buffer we avoid copyfull concat
+      pbuf = self.partBuffers.length === 1 ?
+          self.partBuffers[0] : Buffer.concat(self.partBuffers);
       self.partBuffers = [];
       self.partBufferLength = 0;
       self.totalBytes = self.totalChunkedBytes;
@@ -410,6 +421,13 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
       var req = self.service.putObject({Body: chunk});
       req._managedUpload = self;
       req.on('httpUploadProgress', self.progress).send(self.finishSinglePart);
+      return null;
+    } else if (self.service.config.params.ContentMD5) {
+      var err = AWS.util.error(new Error('The Content-MD5 you specified is invalid for multi-part uploads.'), {
+        code: 'InvalidDigest', retryable: false
+      });
+
+      self.cleanup(err);
       return null;
     }
 
@@ -550,6 +568,9 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     if (err) return upload.callback(err);
     data.Location =
       [endpoint.protocol, '//', endpoint.host, httpReq.path].join('');
+    data.key = this.request.params.Key; // will stay undocumented
+    data.Key = this.request.params.Key;
+    data.Bucket = this.request.params.Bucket;
     upload.callback(err, data);
   },
 
@@ -560,13 +581,15 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     var upload = this._managedUpload;
     if (this.operation === 'putObject') {
       info.part = 1;
+      info.key = this.params.Key;
     } else {
       upload.totalUploadedBytes += info.loaded - this._lastUploadedBytes;
       this._lastUploadedBytes = info.loaded;
       info = {
         loaded: upload.totalUploadedBytes,
         total: upload.totalBytes,
-        part: this.params.PartNumber
+        part: this.params.PartNumber,
+        key: this.params.Key
       };
     }
     upload.emit('httpUploadProgress', [info]);

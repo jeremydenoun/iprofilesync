@@ -15,7 +15,7 @@ global.error = console.log;
 global.debug = console.log;
 
 program
-    .version('1.0.0')
+    .version('1.0.5')
     .option('-q, --quiet', 'silent mode')
 
 program

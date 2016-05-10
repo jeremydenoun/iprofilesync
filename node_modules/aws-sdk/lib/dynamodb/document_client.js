@@ -206,7 +206,7 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    * @see AWS.DynamoDB.deleteItem
    * @example Delete an item from a table
    *  var params = {
-   *    TableName = 'Table',
+   *    TableName : 'Table',
    *    Key: {
    *      HashKey: 'hashkey',
    *      NumberRangeKey: 1
@@ -242,7 +242,7 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    * @see AWS.DynamoDB.getItem
    * @example Get an item from a table
    *  var params = {
-   *    TableName = 'Table',
+   *    TableName : 'Table',
    *    Key: {
    *      HashKey: 'hashkey'
    *    }
@@ -277,7 +277,7 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    * @see AWS.DynamoDB.putItem
    * @example Create a new item in a table
    *  var params = {
-   *    TableName = 'Table',
+   *    TableName : 'Table',
    *    Item: {
    *       HashKey: 'haskey',
    *       NumAttribute: 1,
@@ -331,7 +331,7 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *
    *  var docClient = new AWS.DynamoDB.DocumentClient();
    *
-   *  docClient.updateItem(params, function(err, data) {
+   *  docClient.update(params, function(err, data) {
    *     if (err) console.log(err);
    *     else console.log(data);
    *  });
@@ -358,9 +358,9 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    * @see AWS.DynamoDB.scan
    * @example Scan the table with a filter expression
    *  var params = {
-   *    TableName = 'Table',
-   *    FilterExpression = 'Year = :this_year',
-   *    ExpressionAttributeValues = {':this_year' = 2015}
+   *    TableName : 'Table',
+   *    FilterExpression : 'Year = :this_year',
+   *    ExpressionAttributeValues : {':this_year' : 2015}
    *  };
    *
    *  var docClient = new AWS.DynamoDB.DocumentClient();

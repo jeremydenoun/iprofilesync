@@ -2,6 +2,7 @@ var AWS = require('./core');
 var AcceptorStateMachine = require('./state_machine');
 var inherit = AWS.util.inherit;
 var domain = AWS.util.nodeRequire('domain');
+var jmespath = require('jmespath');
 
 /**
  * @api private
@@ -304,6 +305,7 @@ AWS.Request = inherit({
   constructor: function Request(service, operation, params) {
     var endpoint = service.endpoint;
     var region = service.config.region;
+    var customUserAgent = service.config.customUserAgent;
 
     // global endpoints sign as us-east-1
     if (service.isGlobalEndpoint) region = 'us-east-1';
@@ -312,7 +314,7 @@ AWS.Request = inherit({
     this.service = service;
     this.operation = operation;
     this.params = params || {};
-    this.httpRequest = new AWS.HttpRequest(endpoint, region);
+    this.httpRequest = new AWS.HttpRequest(endpoint, region, customUserAgent);
     this.startTime = AWS.util.date.getDate();
 
     this.response = new AWS.Response(this);
@@ -357,6 +359,26 @@ AWS.Request = inherit({
 
     return this.response;
   },
+
+  /**
+   * @!method  promise()
+   *   Returns a 'thenable' promise.
+   *
+   *   Two callbacks can be provided to the `then` method on the returned promise.
+   *   The first callback will be called if the promise is fulfilled, and the second
+   *   callback will be called if the promise is rejected.
+   *   @callback fulfilledCallback function(data)
+   *     Called if the promise is fulfilled.
+   *     @param data [Object] the de-serialized data returned from the request.
+   *   @callback rejectedCallback function(error)
+   *     Called if the promise is rejected.
+   *     @param error [Error] the error object returned from the request.
+   *   @return [Promise] A promise that represents the state of the request.
+   *   @example Sending a request using promises.
+   *     var request = s3.putObject({Bucket: 'bucket', Key: 'key'});
+   *     var result = request.promise();
+   *     result.then(function(data) { ... }, function(error) { ... });
+   */
 
   /**
    * @api private
@@ -490,10 +512,8 @@ AWS.Request = inherit({
       var config = self.service.paginationConfig(self.operation);
       var resultKey = config.resultKey;
       if (Array.isArray(resultKey)) resultKey = resultKey[0];
-      var results = AWS.util.jamespath.query(resultKey, data);
-      AWS.util.arrayEach(results, function(result) {
-        AWS.util.arrayEach(result, function(item) { callback(null, item); });
-      });
+      var items = jmespath.search(data, resultKey);
+      AWS.util.arrayEach(items, function(item) { callback(null, item); });
     }
 
     this.eachPage(wrappedCallback);
@@ -634,7 +654,7 @@ AWS.Request = inherit({
   toUnauthenticated: function toUnauthenticated() {
     this.removeListener('validate', AWS.EventListeners.Core.VALIDATE_CREDENTIALS);
     this.removeListener('sign', AWS.EventListeners.Core.SIGN);
-    return this.toGet();
+    return this;
   },
 
   /**
@@ -670,5 +690,7 @@ AWS.Request = inherit({
     this._haltHandlersOnError = true;
   }
 });
+
+AWS.util.addPromisesToRequests(AWS.Request);
 
 AWS.util.mixin(AWS.Request, AWS.SequentialExecutor);

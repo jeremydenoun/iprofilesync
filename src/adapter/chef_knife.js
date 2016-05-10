@@ -17,7 +17,7 @@ module.exports = function (options) {
 	        if (options.adapter_chef_home)
 	            shell.cd(options.adapter_chef_home);
 
-	        list = JSON.parse(shell.exec(default_cmd).output.trim());
+	        list = JSON.parse(shell.exec(default_cmd).stdout.trim());
             callback(tools.override_adapter_list(list.rows, options));
 	    } catch (err) {
             global.log(err);
