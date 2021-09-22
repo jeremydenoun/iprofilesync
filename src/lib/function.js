@@ -132,6 +132,23 @@ var override_adapter_list = function(rows, options) {
         }
     }
 
+    // rename
+    if (options.adapter_rename) {
+        var additional = [];
+        for (i = 0, len = options.adapter_rename.length; i < len; ++i) {
+            pattern = _.keys(options.adapter_rename[i])[0];
+            replace = options.adapter_rename[i][pattern];
+            _.each(rows, function (obj, key) {
+                if (_.keys(obj)[0] == pattern) {
+                    additional = _.union(additional, [{[replace]: obj[pattern]}]);
+                    rows.splice(key, 1);
+                }
+            });
+        }
+        if (additional.length)
+            rows = _.union(rows, additional);
+    }
+
     // remove ignore list
     if (options.adapter_ignore) {
         for (i = 0, len = options.adapter_ignore.length; i < len; ++i) {

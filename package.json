@@ -25,9 +25,9 @@
     "readline-history": "^1.2.0",
     "readline-sync": "^1.4.2",
     "simple-plist": "0.0.4",
-    "shelljs": "^0.7.0",
+    "shelljs": "^0.8.4",
     "should": "^8.3.1",
-    "ssh2": "^0.5.0",
+    "ssh2": "^1.4.0",
     "underscore": "^1.8.3"
   },
   "url" : "https://github.com/jeremydenoun/iprofilesync",

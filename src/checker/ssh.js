@@ -2,7 +2,7 @@
     var Fs, Path, Ssh, SshCheck, slice,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-    Ssh = require('ssh2');
+    Ssh = require('ssh2').Client;
 
     Fs = require('fs');
 
@@ -70,6 +70,9 @@
             if (data.hasOwnProperty('checker_password') && typeof data.password == "undefined")
 	            data.password = data.checker_password;
 
+            var debug_ssh = function(str) {
+                //console.log(str)
+            }
             succeeded = false;
             ran = 0;
             errored = 0;
@@ -90,7 +93,8 @@
                             if (port) {
                                 args.port = port;
                             }
-                            conn = new Ssh;
+                            args.debug = debug_ssh;
+                            conn = new Ssh();
                             conn.on('ready', function() {
                                 conn.end();
                                 if (!succeeded) {

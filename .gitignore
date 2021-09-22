@@ -4,7 +4,7 @@ config/global.js
 config/profile/*
 !config/profile/default.json
 !config/profile/demo*.json
-
+node_modules
 test.js
 
 .idea
