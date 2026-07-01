@@ -12,7 +12,7 @@ module.exports = function (options) {
         if (typeof global.config.exporter_path != "undefined")
             global.log("=> \""+expandHomedir(global.config.exporter_path)+"\"");
 
-        nb_elt = data.length - 1;
+        var nb_elt = data.length - 1;
         if (typeof data.Profiles != "undefined")
             nb_elt = data.Profiles.length;
 

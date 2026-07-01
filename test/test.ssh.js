@@ -1,222 +1,76 @@
 var SshCheck = require('../src/checker/ssh.js');
-var ssh = new SshCheck();
 var should = require('should');
 
+// check_nodes reads global.config; provide a minimal default.
+global.config = global.config || { checker_users: [] };
+
 describe('SshCheck', function () {
-    describe('#checkOne', function () {
-        this.timeout(6000);
-
-        it('Should reject missing host', function (done) {
-            ssh.check({
-                user: 'unused',
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.type.should.equal("MissingArgument");
-                    done();
-                }
-            });
-        });
-
-        it('should reject missing user', function (done) {
-            ssh.check({
-                host: 'unused',
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.type.should.equal("MissingArgument");
-                    done();
-                }
-            });
-        });
-
-        it('should report error on non-existant keyfile', function (done) {
-            ssh.check({
-                username: 'unused',
-                host: 'unused',
-                privateKey: '/non/existant',
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.type.should.equal("MissingKeyFile");
-                    done();
-                }
-            });
-        });
-
-        it('should report error on invalid keyfile', function (done) {
-            ssh.check({
-                username: 'unused',
-                host: 'unused',
-                privateKey: '/dev/null',
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.type.should.equal("InvalidKeyFile");
-                    done();
-                }
-            });
-        });
-
-        it('should connect to a valid host', function (done) {
-            ssh.check({
-                username: 'new',
-                host: 'sdf.org',
-                callback: done
-            });
-        });
-
-        it('should timeout on a blackhole host', function (done) {
-            ssh.check({
-                username: 'unused',
-                host: '10.255.255.1',
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.level.should.equal("connection-timeout");
-                    done();
-                }
-            });
-        });
-
-        it('should connect to a password protected host', function (done) {
-            ssh.check({
-                username: 'adaedra',
-                host: '127.0.0.1',
-                callback: function (err, data) {
-                    should.not.exist(err);
-                    should.exist(data);
-                    data.should.equal("password");
-                    done();
-                }
-            });
-        });
-
-        it('should reject a password protected host if explicitely asked so', function (done) {
-            ssh.check({
-                username: 'adaedra',
-                host: '127.0.0.1',
-                tryKeyboard: false,
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.level.should.equal('authentication');
-                    done();
-                }
-            });
-        });
-
-        it('should reject connection with bad password', function (done) {
-            ssh.check({
-                username: 'adaedra',
-                host: '127.0.0.1',
-                tryKeyboard: false,
-                callback: function (err, data) {
-                    should.exist(err);
-                    should.not.exist(data);
-                    err.level.should.equal('authentication');
-                    done();
-                }
-            });
-        });
-
-        it('should connect if a correct password is given', function (done) {
-            var password = process.env.TEST_PASSWORD;
-            var user = process.env.USER;
-
-            if (!password) {
-                throw new Error("You should provide your current password "
-                    + "with the TEST_PASSWORD variable");
-            }
-
-            ssh.check({
-                host: '127.0.0.1',
-                username: user,
-                password: password,
-                callback: function (err, data) {
-                    should.not.exist(err);
-                    should.exist(data);
-                    data.should.be.true;
-                    done();
-                }
+    describe('#check', function () {
+        it('should report an error when the given private key does not exist', function (done) {
+            var ssh = new SshCheck({});
+            ssh.check('localhost', {
+                checker_users: ['root'],
+                checker_private_key: '/non/existant/key',
+                checker_ports: 22
+            }, function (err, data) {
+                should.exist(err);
+                should.not.exist(data);
+                err.message.should.match(/Unable to find private key/);
+                done();
             });
         });
     });
 
-    describe('#check', function () {
-        this.timeout(10000);
+    describe('#check_nodes', function () {
+        // Drive check_nodes with a stubbed check() so no network/key is needed,
+        // then assert how the per-node checker result is derived.
 
-        it('should return correct results for connection tries', function (done) {
-            var users = [ 'adaedra', 'root', 'pinkiepie', 'foo', 'nobody' ];
-            ssh.check_nodes(
-                users,
-                {
-                    host: '127.0.0.1',
-                    callback: function (err, data) {
-                        should.not.exist(err);
-                        should.exist(data);
-                        should.exist(data.success);
-                        should.exist(data.failure);
-                        data.success.length.should.equal(0);
-                        data.failure.length.should.equal(users.length);
-                        done();
-                    }
-                });
-        });
+        it('marks a node as failed when the check errors', function (done) {
+            var ssh = new SshCheck({});
+            global.config = { checker_users: ['root', 'admin'] };
 
-        it('should report fatal errors', function (done) {
-            ssh.check_nodes(
-                [ 'o', 's', 'e', 'f' ],
-                {
-                    host: 'nowhere',
-                    privateKey: '/non/existant',
-                    callback: function (err, data) {
-                        should.exist(err);
-                        should.not.exist(data);
-                        should.exist(err.fatal);
-                        err.fatal.should.be.true;
-                        err.type.should.equal('MissingKeyFile');
-                        done();
-                    }
-                });
-        });
-
-        it ('should report correct results for password based authentication', function (done) {
-            var password = process.env.TEST_PASSWORD;
-            var user = process.env.USER;
-
-            if (!password) {
-                throw new Error("You should provide your current password "
-                    + "with the TEST_PASSWORD variable");
-            }
-
-            var users = {
-                root: 'foo',
-                nobody: 'bar'
+            ssh.check = function (host, opts, cb) {
+                process.nextTick(function () { cb(new Error('nope')); });
             };
-            users[user] = password;
 
-            ssh.check_nodes(
-                users,
-                {
-                    host: '127.0.0.1',
-                    callback: function (err, data) {
-                        should.not.exist(err);
-                        should.exist(data);
-                        should.exist(data.success);
-                        should.exist(data.failure);
-                        data.success.length.should.equal(1);
-                        data.failure.length.should.equal(2);
-                        data.success.should.containEql(user);
-                        data.host.should.be.equal('127.0.0.1');
-                        var users = data.failure.map(function (data) {
-                            return data.user;
-                        });
-                        users.should.containEql('root');
-                        users.should.containEql('nobody');
-                        done();
-                    }
+            ssh.check_nodes([{ 'web01': { ipaddress: '10.0.0.1' } }], function (data) {
+                var checker = data[0].checker;
+                should.exist(checker);
+                checker.success.should.equal(false);
+                should.exist(checker.error);
+                done();
+            });
+        });
+
+        it('marks a node as successful on a clean check', function (done) {
+            var ssh = new SshCheck({});
+            global.config = { checker_users: ['root'] };
+
+            ssh.check = function (host, opts, cb) {
+                process.nextTick(function () {
+                    cb(null, { success: true, user: 'root', host: host, port: 22 });
                 });
+            };
+
+            ssh.check_nodes([{ 'web01': { ipaddress: '10.0.0.1' } }], function (data) {
+                data[0].checker.success.should.equal(true);
+                data[0].checker.user.should.equal('root');
+                done();
+            });
+        });
+
+        it('forces success when checker_force_success is set', function (done) {
+            var ssh = new SshCheck({});
+            global.config = { checker_users: ['root'], checker_force_success: true };
+
+            ssh.check = function (host, opts, cb) {
+                process.nextTick(function () { cb(new Error('nope')); });
+            };
+
+            ssh.check_nodes([{ 'web01': { ipaddress: '10.0.0.1' } }], function (data) {
+                data[0].checker.success.should.equal(true);
+                done();
+            });
         });
     });
 });

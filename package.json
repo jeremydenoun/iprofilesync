@@ -1,6 +1,6 @@
 {
   "name": "iprofilesync",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "profiles synchronisation tools (file/chef/puppet/vmware/aws/...) -> (file/iterm2/...)",
   "keywords": [
     "profile",
@@ -12,23 +12,37 @@
     "puppet",
     "vmware"
   ],
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
-    "aws-sdk": "^2.3.9",
+    "@aws-sdk/client-ec2": "^3.1077.0",
     "changeset": "^0.2.6",
+    "chef": "^1.0.0",
+    "commander": "^15.0.0",
     "expand-home-dir": "^0.0.3",
     "fs-extended": "^0.2.1",
-    "iprofilesync-chef": "0.3.1-custom",
-    "iprofilesync-commander": "2.3.0-custom",
-    "mocha": "^9.1.1",
-    "node-json-minify": "^1.0.0",
-    "path-extra": "^3.0.0",
+    "node-json-minify": "^3.0.0",
+    "path-extra": "^4.3.0",
     "readline-history": "^1.2.0",
-    "readline-sync": "^1.4.2",
-    "shelljs": "^0.8.5",
-    "should": "^8.3.1",
-    "simple-plist": "1.3.1",
-    "ssh2": "^1.4.0",
-    "underscore": "^1.8.3"
+    "readline-sync": "^1.4.10",
+    "shelljs": "^0.10.0",
+    "simple-plist": "^1.3.1",
+    "ssh2": "^1.17.0",
+    "underscore": "^1.13.8"
+  },
+  "devDependencies": {
+    "mocha": "^11.7.6",
+    "should": "^13.2.3"
+  },
+  "overrides": {
+    "request": "npm:@cypress/request@^3.0.9",
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.5",
+    "tough-cookie": "^4.1.4",
+    "form-data": "^4.0.6",
+    "qs": "^6.15.3",
+    "uuid": "^11.1.1"
   },
   "url": "https://github.com/jeremydenoun/iprofilesync",
   "repository": {
@@ -36,7 +50,7 @@
     "url": "https://github.com/jeremydenoun/iprofilesync.git"
   },
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "mocha"
   },
   "main": "iprofilesync",
   "author": {

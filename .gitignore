@@ -4,9 +4,12 @@ config/global.js
 config/profile/*
 !/config/profile/default.json
 !/config/profile/demo*.json
-/node_modules/*
-!/node_modules/iprofilesync*
+/node_modules
 test.js
 
 .idea
 *.iml
+
+# editor swap files
+*.swp
+*.swo

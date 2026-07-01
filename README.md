@@ -6,7 +6,7 @@ iprofilesync dynamic profil exporter
 
 ### Prerequisites :
 
-    * node (tested with v5.1.0)
+    * node (>= 22, tested with v22)
     * for file usage :
           * nothing
     * for chef usage :
@@ -21,13 +21,19 @@ iprofilesync dynamic profil exporter
     * for vmware usage : (*TODO*)
           * credentials
 
-All dependencies are included in node_modules/ in a correct version and describe in package.json you can show it with npm list.
+All dependencies are described in package.json, you can list them with `npm list`.
 
-Actually we use 2 npm modules customized for assure correct behavior :
+Requires Node.js >= 22.
 
-    * iprofilesync-chef (0.3.0-custom) => I replace forsake usage by rsautl wrapper module customized by myself
-    to be synchronous (if no callback provided)
-    * iprofilesync-commander (2.3.0-custom) => I would like a "interactive cli" not really functionnal in commander default
+The two formerly customized modules have been replaced by their upstream releases:
+
+    * `chef` (official) => now provides the Chef Server API. To accept a
+      self-signed certificate, set `"adapter_chef_insecure": true` in the chef
+      profile config (disabled by default).
+    * `commander` (official) => the interactive CLI is now handled natively via
+      commander's `exitOverride`.
+
+AWS support uses the AWS SDK v3 (`@aws-sdk/client-ec2`).
 
 ### Installation
 
