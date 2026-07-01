@@ -118,9 +118,9 @@ module.exports = function (options) {
     }
 
     this.index = function (data, callback) {
-        config = global.config;
+        var config = global.config;
         var _result = [];
-        var i, len, keys;
+        var i, len, j, len2, host;
 
         for (i = 0, len = data.length; i < len; ++i) {
             var elt = config.indexer_static_template;

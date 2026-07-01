@@ -85,7 +85,7 @@ var export_data = function(format, data, target, display_changeset) {
         }
         changeset_object(actual, data);
     }
-    path = Path.dirname(expandHomedir(target));
+    var path = Path.dirname(expandHomedir(target));
     if (!Fs.existsSync(path)) {
         global.log("Warning: your output path (" + path + ") doesn't exists, I will create it for you");
         Fs.createDirSync(path, 0755);
@@ -136,8 +136,8 @@ var override_adapter_list = function(rows, options) {
     if (options.adapter_rename) {
         var additional = [];
         for (i = 0, len = options.adapter_rename.length; i < len; ++i) {
-            pattern = _.keys(options.adapter_rename[i])[0];
-            replace = options.adapter_rename[i][pattern];
+            var pattern = _.keys(options.adapter_rename[i])[0];
+            var replace = options.adapter_rename[i][pattern];
             _.each(rows, function (obj, key) {
                 if (_.keys(obj)[0] == pattern) {
                     additional = _.union(additional, [{[replace]: obj[pattern]}]);

@@ -1,5 +1,5 @@
 (function() {
-    var Fs, Path, Ssh, SshCheck, slice,
+    var Fs, Path, Ssh, SshCheck, slice, _, expandHomedir,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
     Ssh = require('ssh2').Client;
@@ -22,6 +22,29 @@
             }
         }
         return r;
+    };
+
+    // Rank a user against global.config.checker_users: lower rank = higher
+    // precedence. A user missing from the list ranks last (Infinity) instead of
+    // being treated as top priority (which _.indexOf's -1 used to cause).
+    var user_rank = function(user) {
+        var users = (global.config && global.config.checker_users) || [];
+        var idx = _.indexOf(users, user);
+        return idx === -1 ? Infinity : idx;
+    };
+
+    // Decide whether a freshly computed check (candidate) should replace the one
+    // already stored (current) for a node:
+    //   1. a successful check always beats a failed one;
+    //   2. between two successes, the higher-precedence user wins.
+    var should_replace = function(current, candidate) {
+        if (candidate.success !== current.success) {
+            return candidate.success === true;
+        }
+        if (!candidate.success) {
+            return false;
+        }
+        return user_rank(candidate.user) < user_rank(current.user);
     };
 
     SshCheck = (function() {
@@ -211,10 +234,8 @@
                         if (done[key] != true) {
                             done[key] = true;
                             data[key].checker = obj;
-                        } else {
-                            if ((obt.success == true && data[key].checker.success == false) ||
-                                (_.indexOf(global.config.checker_users, obj.user) < _.indexOf(global.config.checker_users, data[key].checker.user)))
-                                data[key].checker = obj;
+                        } else if (should_replace(data[key].checker, obj)) {
+                            data[key].checker = obj;
                         }
 
                         // @TODO: replace this simple end callback detection by an intelligent system based on predictive number of callback and a scoring
@@ -226,7 +247,7 @@
                 })(this, key));
             }
 
-            if (!hash instanceof Array) {
+            if (!(hash instanceof Array)) {
                 hash.rows = _results;
                 return hash;
             }
