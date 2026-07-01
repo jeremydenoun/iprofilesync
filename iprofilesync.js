@@ -109,11 +109,15 @@ function buildProgram() {
                 return;
 
             var result = config;
-            Object.keys(result).filter(function (v) {
-                return !v.match(pattern);
-            }).forEach(function (v) {
-                delete result[v];
-            });
+            // Filter keys by plain substring match. Using indexOf (not a regex
+            // built from the CLI argument) avoids regex injection / ReDoS.
+            if (typeof pattern !== 'undefined') {
+                Object.keys(result).filter(function (v) {
+                    return v.indexOf(pattern) === -1;
+                }).forEach(function (v) {
+                    delete result[v];
+                });
+            }
 
             global.log(util.inspect(result, { depth: null }));
         })
